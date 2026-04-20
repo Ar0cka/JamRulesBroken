@@ -1,7 +1,11 @@
 using System;
+using System.Numerics;
+using Player;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using Vector2 = UnityEngine.Vector2;
 
 public class Movement : MonoBehaviour
 {
@@ -10,6 +14,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
 
+    [SerializeField] private PlayerStateController playerStateController;
+    
     [Header("Animations")] 
     [SerializeField] private string animationWalkName;
 
@@ -20,6 +26,14 @@ public class Movement : MonoBehaviour
     
     public void Update()
     {
+        if (EventSystem.current.IsPointerOverGameObject() || !playerStateController.CanMove || playerStateController.IsShopOpen)
+        {
+            rigidbody2D.velocity = Vector2.zero;
+            _mouseInputCoordinate = Vector2.zero;
+            animator.SetBool(animationWalkName, false);
+            return;
+        }
+        
         ClickListener();
         Move();
     }

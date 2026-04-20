@@ -6,11 +6,14 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "Unit", menuName = "Config/Unit", order = 0)]
     public class UnitConfigs : ScriptableObject
     {
+        [field: SerializeField] public string UnitName { get; private set; }
         [field: SerializeField] public UnitMovement Movement { get; private set; }
         [field: SerializeField] public UnitStats Stats { get; private set; }
         [field: SerializeField] public UnitAnimation Animation { get; private set; }
         [field:SerializeField] public UnitType Type { get; private set; }
         [field:SerializeField] public GameObject UnitModel { get; private set; }
+        
+        [field:SerializeField] public Sprite UnitSprite { get; private set; }
     }
 
     [Serializable]

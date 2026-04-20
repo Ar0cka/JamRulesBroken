@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a55e17d7c09d4d61a9a1a05f6c7aed84, type: 3}
   m_Name: TestUnitConfig
   m_EditorClassIdentifier: 
+  <UnitName>k__BackingField: fire_spirit
   <Movement>k__BackingField:
     speed: 2
     acceleration: 0
@@ -25,3 +26,4 @@ MonoBehaviour:
     idle: 
   <Type>k__BackingField: 0
   <UnitModel>k__BackingField: {fileID: 7946001661852114341, guid: 79cf9319aa337cbbea5a9df53ba596ad, type: 3}
+  <UnitSprite>k__BackingField: {fileID: 21300000, guid: 2469cc4ce1150fc6b9322ca14bd761fd, type: 3}

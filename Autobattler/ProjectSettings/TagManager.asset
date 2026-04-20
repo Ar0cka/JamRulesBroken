@@ -3,15 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Shops
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
+  - Trigger
   - 
   - 
   - 
@@ -47,6 +48,21 @@ TagManager:
   - name: Unit
     uniqueID: 1114987385
     locked: 0
-  - name: Player
+  - name: BackWalls
+    uniqueID: 2998179397
+    locked: 0
+  - name: MainScene
     uniqueID: 2598179211
+    locked: 0
+  - name: BottomWalls
+    uniqueID: 3216698637
+    locked: 0
+  - name: UI
+    uniqueID: 719254015
+    locked: 0
+  - name: DialogUI
+    uniqueID: 3985609851
+    locked: 0
+  - name: Hude
+    uniqueID: 1937210021
     locked: 0
