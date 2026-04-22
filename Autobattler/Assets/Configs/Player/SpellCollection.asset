@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d609a34a2a45b9a71dc55902a3b390, type: 3}
+  m_Name: SpellCollection
+  m_EditorClassIdentifier: 
+  <PlayerStartSpells>k__BackingField:
+  - {fileID: 11400000, guid: d70c6e245df527d62b4b7159c6261059, type: 2}

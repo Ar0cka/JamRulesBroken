@@ -30,7 +30,13 @@ public class Movement : MonoBehaviour
         {
             rigidbody2D.velocity = Vector2.zero;
             _mouseInputCoordinate = Vector2.zero;
-            animator.SetBool(animationWalkName, false);
+            
+            if (IsWalking)
+            {
+                animator.SetBool(animationWalkName, false);
+                IsWalking = false;
+            }
+            
             return;
         }
         

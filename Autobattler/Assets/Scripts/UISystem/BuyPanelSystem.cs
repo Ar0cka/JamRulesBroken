@@ -27,10 +27,7 @@ namespace UISystem
         
         private UnitShopConfig _config;
 
-        private void Awake()
-        {
-            gameObject.SetActive(false);
-        }
+        private bool _isOpen = false;
 
         private void BuyItem()
         {
@@ -59,7 +56,8 @@ namespace UISystem
 
         public void OpenPanel(UnitShopConfig config)
         {
-            gameObject.SetActive(true);
+            if (_isOpen) return;
+            
             _config = config;
 
             countSlider.onValueChanged.AddListener(OnSliderValueChanged);
@@ -71,6 +69,8 @@ namespace UISystem
             
             buyButton.onClick.AddListener(BuyItem);
             cancelButton.onClick.AddListener(ClosePanel);
+            
+            _isOpen = true;
         }
 
         public void ClosePanel()
@@ -81,6 +81,8 @@ namespace UISystem
             buyButton.onClick.RemoveListener(BuyItem);
             cancelButton.onClick.RemoveListener(ClosePanel);
             countSlider.onValueChanged.RemoveAllListeners();
+            
+            _isOpen = false;
         }
 
         private void OnSliderValueChanged(float value)

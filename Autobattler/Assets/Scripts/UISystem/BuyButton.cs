@@ -29,8 +29,8 @@ namespace UISystem
             
             button.onClick.AddListener(() =>
             {
-                if (!_buyPanelSystem.gameObject.activeSelf) 
-                    _buyPanelSystem.OpenPanel(_config);
+                _buyPanelSystem.gameObject.SetActive(true);
+                _buyPanelSystem.OpenPanel(_config);
             });
         }
         

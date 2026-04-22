@@ -7,12 +7,13 @@ namespace ScriptableObjects
     public class UnitConfigs : ScriptableObject
     {
         [field: SerializeField] public string UnitName { get; private set; }
+        
         [field: SerializeField] public UnitMovement Movement { get; private set; }
         [field: SerializeField] public UnitStats Stats { get; private set; }
         [field: SerializeField] public UnitAnimation Animation { get; private set; }
-        [field:SerializeField] public UnitType Type { get; private set; }
-        [field:SerializeField] public GameObject UnitModel { get; private set; }
         
+        [field:SerializeField] public GameObject UnitModel { get; private set; }
+        [field:SerializeField] public UnitType Type { get; private set; }
         [field:SerializeField] public Sprite UnitSprite { get; private set; }
     }
 
@@ -29,6 +30,8 @@ namespace ScriptableObjects
         public int health;
         public int attack;
         public int defense;
+        public int maxCellsInTurn;
+        public int initiative;
     }
 
     [Serializable]
@@ -36,7 +39,8 @@ namespace ScriptableObjects
     {
         public string walk;
         public string death;
-        public string idle;
+        public string attack;
+        public string hit;
     }
 
     public enum UnitType

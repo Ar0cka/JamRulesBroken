@@ -1,6 +1,6 @@
 namespace Grid
 {
-    public struct GridData
+    public class GridData
     {
         public int X, Y;
         public float WorldX, WorldY;
