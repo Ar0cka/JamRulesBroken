@@ -15,5 +15,5 @@ MonoBehaviour:
   _shopConfigs:
   - config: {fileID: 11400000, guid: d70c6e245df527d62b4b7159c6261059, type: 2}
     price: 1500
-  - config: {fileID: 11400000, guid: d70c6e245df527d62b4b7159c6261059, type: 2}
-    price: 1500
+  - config: {fileID: 11400000, guid: bbfaaaa8a494b66268c9024a8709f9e7, type: 2}
+    price: 4500

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28f7c7d4cf454db49678d779173138a5, type: 3}
+  m_Name: TavernDialog
+  m_EditorClassIdentifier: 
+  <AcceptQuestText>k__BackingField: Hi, can you help me find some blue light ore
+    to create weapons for my army?
+  <AfterAcceptText>k__BackingField: Thank you very much. I'll be waiting.
+  <AwaitAcceptResultText>k__BackingField: Haven't you brought the ore yet? Okay,
+    I'll take care of other things for now.
+  <NotNeededResultText>k__BackingField: Haven't you brought the ore yet? Okay, I'll
+    take care of other things for now.
+  <QuestCompletedText>k__BackingField: Thank you for the ore. Here's your money for
+    your work.
+  <AfterQuestText>k__BackingField: Thank you for your work. More wars will be available
+    soon.
+  <FailedText>k__BackingField: 
+  <QuestInfo>k__BackingField:
+    questId: 2
+    questName: Find blue light ore
+    questDescription: Find ore in one of the dungeon rooms
+    neededItems: {fileID: 11400000, guid: 3230eba8600f8b09faee8a7b514785f7, type: 2}
+    neededAmount: 3

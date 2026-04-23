@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccd0d8b9edee4e40a7d695164d22c904, type: 3}
+  m_Name: SpeedSpell
+  m_EditorClassIdentifier: 
+  <SpellName>k__BackingField: Speed
+  <SpellStats>k__BackingField:
+    spellType: 2
+    spellElement: 3
+    spellTarget: 0
+    spellDamage: 30
+    spellCost: 5
+    spellSpeed: 10
+  <SpellIcon>k__BackingField: {fileID: 21300000, guid: cbf572e383a8327c192adac5456859dc, type: 3}
+  <SpellVfx>k__BackingField: {fileID: 4813510991447186413, guid: 77487bcfe6723a2dd83097804b727979, type: 3}
+  <EffectData>k__BackingField:
+    EffectType: 2
+    Turns: 2
+  <AnimationName>k__BackingField: 

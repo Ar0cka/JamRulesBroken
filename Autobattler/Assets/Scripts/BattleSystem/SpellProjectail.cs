@@ -27,7 +27,7 @@ namespace BattleSystem
             
             if (spellConfig.SpellStats.spellType == SpellType.Heal)
             {
-                unit.Heal(-spellConfig.SpellStats.spellDamage);
+                unit.Heal(spellConfig.SpellStats.spellDamage);
                 Destroy(gameObject);
                 yield break;
             }

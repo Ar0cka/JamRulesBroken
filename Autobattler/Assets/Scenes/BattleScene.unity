@@ -437,7 +437,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -4.0599976, y: -23.700012}
+  m_AnchoredPosition: {x: -4.0599976, y: -23.699997}
   m_SizeDelta: {x: -28.12, y: -47.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &367279621
@@ -1107,22 +1107,43 @@ MonoBehaviour:
       TurnsLess: 0
       CurrentSpellData: {fileID: 0}
     <UnitConfig>k__BackingField: {fileID: 11400000, guid: 3fd37028e51e7199689888ca123e1005, type: 2}
-    <Count>k__BackingField: 10
+    <Count>k__BackingField: 40
+  - CurrentEffectData:
+      EffectType: 0
+      TurnsLess: 0
+      CurrentSpellData: {fileID: 0}
+    <UnitConfig>k__BackingField: {fileID: 11400000, guid: 2bc24bf9e41890a45837284656368702, type: 2}
+    <Count>k__BackingField: 25
+  - CurrentEffectData:
+      EffectType: 0
+      TurnsLess: 0
+      CurrentSpellData: {fileID: 0}
+    <UnitConfig>k__BackingField: {fileID: 11400000, guid: 57e7185b0ce905e608a8b21b86732edb, type: 2}
+    <Count>k__BackingField: 25
   unitsEnemy:
   - CurrentEffectData:
       EffectType: 0
       TurnsLess: 0
       CurrentSpellData: {fileID: 0}
     <UnitConfig>k__BackingField: {fileID: 11400000, guid: 3aeb9ab0efe92ab6482bbc7493ebc1e6, type: 2}
-    <Count>k__BackingField: 25
+    <Count>k__BackingField: 50
   - CurrentEffectData:
       EffectType: 0
       TurnsLess: 0
       CurrentSpellData: {fileID: 0}
-    <UnitConfig>k__BackingField: {fileID: 11400000, guid: 2bc24bf9e41890a45837284656368702, type: 2}
-    <Count>k__BackingField: 4
+    <UnitConfig>k__BackingField: {fileID: 11400000, guid: 39e11337881029b19b580d0e1f991892, type: 2}
+    <Count>k__BackingField: 23
+  - CurrentEffectData:
+      EffectType: 0
+      TurnsLess: 0
+      CurrentSpellData: {fileID: 0}
+    <UnitConfig>k__BackingField: {fileID: 11400000, guid: 3fd37028e51e7199689888ca123e1005, type: 2}
+    <Count>k__BackingField: 15
   spellsConfigs:
   - {fileID: 11400000, guid: c627936cf6672163fbc200344f70a2e7, type: 2}
+  - {fileID: 11400000, guid: d70c6e245df527d62b4b7159c6261059, type: 2}
+  - {fileID: 11400000, guid: bbfaaaa8a494b66268c9024a8709f9e7, type: 2}
+  - {fileID: 11400000, guid: 35134cd59759011718075c7f45182620, type: 2}
   playerCastSystem: {fileID: 1845868459}
   chooseSpell: {fileID: 636090430}
 --- !u!4 &1008442925
@@ -55871,7 +55892,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200.4, y: 0}
+  m_AnchoredPosition: {x: 200.39996, y: 0}
   m_SizeDelta: {x: 400.8, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1343798524
@@ -56787,7 +56808,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 110, y: 110}
-  m_Spacing: {x: 15, y: 0}
+  m_Spacing: {x: 15, y: 15}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &1917299623

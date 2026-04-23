@@ -1,17 +1,21 @@
+using System;
 using System.Collections.Generic;
 using ScriptableObjects;
+using UnityEngine;
 
 namespace Player
 {
-    public class PlayerInventory
+    public class PlayerInventory : MonoBehaviour
     {
         private Dictionary<string, InventorySlot> _playerInventory = new();
+        public Action OnInventoryUpdate;
 
         public void AddItemToInventory(ItemConfig itemConfig)
         {
-            if (_playerInventory.TryGetValue(itemConfig.name, out var slot))
+            if (_playerInventory.TryGetValue(itemConfig.ItemName, out var slot))
             {
                 slot.Amount += 1;
+                OnInventoryUpdate?.Invoke();
                 return;
             }
             
@@ -22,11 +26,13 @@ namespace Player
             };
 
             _playerInventory[inventorySlot.Config.ItemName] = inventorySlot;
+
+            OnInventoryUpdate?.Invoke();
         }
 
         public bool RemoveItem(ItemConfig itemConfig, int amountToRemove)
         {
-            if (_playerInventory.TryGetValue(itemConfig.name, out var slot))
+            if (_playerInventory.TryGetValue(itemConfig.ItemName, out var slot))
             {
                 if (slot.Amount < amountToRemove)
                     return false;

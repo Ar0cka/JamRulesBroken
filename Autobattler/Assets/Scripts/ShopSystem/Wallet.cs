@@ -14,12 +14,13 @@ namespace ShopSystem
         private void Start()
         {
             CurrentMoney = startMoney;
+            moneyText.text = $"Money: {CurrentMoney}";
         }
 
         public void AddMoney(int money)
         {
             CurrentMoney += money;
-            moneyText.text = CurrentMoney.ToString();
+            moneyText.text = $"Money: {CurrentMoney}";
         }
         
         public bool SpendMoney(int money)
@@ -27,7 +28,7 @@ namespace ShopSystem
             if (CurrentMoney >= money)
             {
                 CurrentMoney -= money;
-                moneyText.text = CurrentMoney.ToString();
+                moneyText.text = $"Money: {CurrentMoney}";
                 return true;
             }
             

@@ -26,7 +26,7 @@ public class Movement : MonoBehaviour
     
     public void Update()
     {
-        if (EventSystem.current.IsPointerOverGameObject() || !playerStateController.CanMove || playerStateController.IsShopOpen)
+        if (!playerStateController.CanMove || playerStateController.IsShopOpen)
         {
             rigidbody2D.velocity = Vector2.zero;
             _mouseInputCoordinate = Vector2.zero;

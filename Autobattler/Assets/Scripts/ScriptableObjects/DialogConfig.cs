@@ -19,6 +19,7 @@ namespace ScriptableObjects
     [Serializable]
     public class QuestData
     {
+        public int questId;
         public string questName;
         public string questDescription;
         public ItemConfig neededItems;

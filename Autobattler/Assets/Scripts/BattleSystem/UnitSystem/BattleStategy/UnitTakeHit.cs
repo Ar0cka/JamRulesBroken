@@ -56,25 +56,24 @@ namespace BattleSystem.BattleStategy
             if (Count <= 0)
             {
                 unitAnimator.SetTrigger(unitConfig.Animation.death);
-                yield return new WaitForSeconds(animationTimeDead);
                 unitDeadAction?.Invoke();
+                yield return new WaitForSeconds(animationTimeDead);
+                Destroy(gameObject);
                 Debug.Log($"{gameObject.name} is dead :(");
                 yield break;
             }
             
             unitAnimator.SetTrigger(unitConfig.Animation.hit);
             yield return new WaitForSeconds(animationTimeHit);
-            
         }
 
         public void Heal(int unitHeal)
         {
             _currentHitPoints += unitHeal;
 
-            if (_currentHitPoints <= _oneCountHitPoints)
-                Count = 1;
-            else 
-                _currentHitPoints = Mathf.RoundToInt((float)_currentHitPoints / _oneCountHitPoints);
+            Count = _currentHitPoints <= _oneCountHitPoints ? 1 : Mathf.RoundToInt((float)_currentHitPoints / _oneCountHitPoints);
+            
+            UpdateHitPointText();
         }
         
         private void UpdateHitPointText()

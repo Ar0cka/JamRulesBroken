@@ -72,7 +72,6 @@ namespace BattleSystem
                 _targetPosition = targetPosition;
 
 #endif
-                
                 var hitAll = Physics2D.OverlapCircleAll(targetPosition, overlapRadius);
 
                 var hit = hitAll.FirstOrDefault(x => x.CompareTag("Unit"));
@@ -150,13 +149,7 @@ namespace BattleSystem
         
         private void UnitIsDead()
         {
-            var isDeleted = _deadFunc.Invoke(_data.UnitConfig.UnitName, objectParent);
-            
-            if (isDeleted)
-            {
-                Debug.Log("Destroying unit after dead");
-                Destroy(gameObject);
-            }
+            _deadFunc.Invoke(_data.UnitConfig.UnitName, objectParent);
         }
 
 #if UNITY_EDITOR

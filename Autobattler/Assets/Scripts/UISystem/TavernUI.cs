@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DefaultNamespace.WorldSceneScripts.NpcDialogScript;
 using Player;
 using ScriptableObjects;
 using TMPro;
@@ -16,6 +17,7 @@ namespace UISystem
         [SerializeField] private Button exitButton;
         [SerializeField] private ShopConfig shopConfig;
         [SerializeField] private Transform imageParent;
+        [SerializeField] private DialogController dialogWindow;
         [SerializeField] private BuyPanelSystem buyPanel;
         private readonly Dictionary<string, UnitShopConfig> _shopConfigs = new();
         private readonly List<BuyButton> _buttons = new();
@@ -71,6 +73,7 @@ namespace UISystem
             _buttons.Clear();
             _shopConfigs.Clear();
             
+            dialogWindow.CloseDialog();
             panelObject.SetActive(false);
 
             stateController.IsShopOpen = false;

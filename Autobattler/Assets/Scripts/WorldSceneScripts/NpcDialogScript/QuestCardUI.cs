@@ -12,14 +12,13 @@ namespace DefaultNamespace.WorldSceneScripts.NpcDialogScript
         private QuestState _questState;
         private QuestData _questData;
         
-        public void SetQuest(QuestData questData)
+        public void SetQuest(QuestData questData, int amount = 0)
         {
             _questState = QuestState.Active;
             
             _questData = questData;
             
-            questTitleText.text = $"{_questState}: {questData.questName}";
-            questTitleText.text = $"{_questData.questDescription}:0/{_questData.neededAmount}";
+            questTitleText.text = $"{_questState}: {_questData.questName}\n{_questData.neededItems.ItemName}: {amount}/{_questData.neededAmount}";
         }
 
         public void UpdateQuestProgress(int amountToAdd)
@@ -29,22 +28,17 @@ namespace DefaultNamespace.WorldSceneScripts.NpcDialogScript
                 if (amountToAdd >= _questData.neededAmount)
                 {
                     _questState = QuestState.ReadyToComplete;
-                    questTitleText.text = $"{_questState}: {_questData.questName}";
-                    questTitleText.text = $"Ready to complete: {amountToAdd}/{_questData.neededAmount}";
-                    return;
                 }
                 
-                questTitleText.text = $"{_questState}: {_questData.questName}";
-                questDescriptionText.text = $"{_questData.questDescription}:{amountToAdd}/{_questData.neededAmount}";
+                questTitleText.text = $"{_questState}: {_questData.questName}\n{_questData.neededItems.ItemName}: {amountToAdd}/{_questData.neededAmount}";
+               // questDescriptionText.text = $"{_questData.questDescription}: {amountToAdd}/{_questData.neededAmount}";
             }
         }
 
         public void CompleteQuest()
         {
             _questState = QuestState.Completed;
-
             questTitleText.text = $"{_questState}:{_questData.questName}";
-            questDescriptionText.gameObject.SetActive(false);
         }
     }
 

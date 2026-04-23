@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <UnitConfigs>k__BackingField:
   - config: {fileID: 11400000, guid: 3aeb9ab0efe92ab6482bbc7493ebc1e6, type: 2}
-    price: 15
-    count: 100
+    price: 100
+    count: 1000
   - config: {fileID: 11400000, guid: 3fd37028e51e7199689888ca123e1005, type: 2}
     price: 150
-    count: 30
+    count: 120
+  - config: {fileID: 11400000, guid: 2bc24bf9e41890a45837284656368702, type: 2}
+    price: 300
+    count: 40

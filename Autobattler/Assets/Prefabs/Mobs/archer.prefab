@@ -459,7 +459,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitAnimator: {fileID: 3799778302467554470}
   animationTimeHit: 0.2
-  animationTimeDead: 0.3
+  animationTimeDead: 0.5
   hitPointText: {fileID: 974202016345505509}
   textContainer: {fileID: 276726821302116515}
   countBac: {fileID: 4761397843759668204}

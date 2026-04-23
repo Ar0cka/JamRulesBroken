@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28f7c7d4cf454db49678d779173138a5, type: 3}
+  m_Name: magic_lavka
+  m_EditorClassIdentifier: 
+  <AcceptQuestText>k__BackingField: Hello, traveler. Can you help me find the flowers
+    of paradise? I'll reward you with a nice cash reward.
+  <AfterAcceptText>k__BackingField: Really, thank you very much. I'll be waiting.
+  <AwaitAcceptResultText>k__BackingField: Haven't you brought flowers yet? I'll be
+    waiting here when you find them.
+  <NotNeededResultText>k__BackingField: Haven't you brought flowers yet? I'll be
+    waiting here when you find them.
+  <QuestCompletedText>k__BackingField: Thank you very much, now I can finish creating
+    the new spell. Here's your money for the work.
+  <AfterQuestText>k__BackingField: Thank you so much for finding the flowers. Now
+    I'll work on a new spell.
+  <FailedText>k__BackingField: 
+  <QuestInfo>k__BackingField:
+    questId: 1
+    questName: Find paradise flowers
+    questDescription: Find flowers in one of the dungeon biomes
+    neededItems: {fileID: 11400000, guid: 96788bf69154bc6c0aec42ed204cf1fb, type: 2}
+    neededAmount: 4

@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: SpellCollection
   m_EditorClassIdentifier: 
   <PlayerStartSpells>k__BackingField:
-  - {fileID: 11400000, guid: d70c6e245df527d62b4b7159c6261059, type: 2}
+  - {fileID: 11400000, guid: c627936cf6672163fbc200344f70a2e7, type: 2}
+  - {fileID: 11400000, guid: 35134cd59759011718075c7f45182620, type: 2}

@@ -111,8 +111,11 @@ namespace BattleSystem
                     {
                         var freeSell = gridSystem.GetFreeCells(unit.GetData().X, unit.GetData().Y, 0.5f);
                         
-                        if (freeSell != null)
+                        if (freeSell != null && unit == null || !IsHaveInDictionary(unit.UnitName))
                         {
+                            if (unit == null || !IsHaveInDictionary(unit.UnitName)) 
+                                continue;
+                            
                             var targetVector = new Vector2(freeSell.WorldX, freeSell.WorldY);
                             
                             yield return unit.Move(targetVector);
@@ -123,12 +126,16 @@ namespace BattleSystem
                         
                         if (hitFirst != null)
                         {
+                            if (unit == null || !IsHaveInDictionary(unit.UnitName)) 
+                                continue;
+                            
                             var unitControllerUnitRange = hitFirst.GetComponent<UnitController>();
                             yield return StartCoroutine(unit.Attack(unitControllerUnitRange));
                             continue;
                         }
                     }
-                    
+                    if (unit == null || !IsHaveInDictionary(unit.UnitName))
+                        continue;
                     var unitTarget = GetRandomEnemyUnit(unit);
                     yield return StartCoroutine(unit.Attack(unitTarget));
                     continue;
@@ -157,6 +164,9 @@ namespace BattleSystem
                     continue;
                 
                 var unitController = target.GetComponent<UnitController>();
+                
+                if (unitController.GetData().UnitConfig.Type != UnitType.Range)
+                    continue;
                 
                 if (unitController.objectParent == currentUnitType) continue;
 

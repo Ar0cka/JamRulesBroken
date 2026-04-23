@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DefaultNamespace.WorldSceneScripts.NpcDialogScript;
 using Player;
 using ScriptableObjects;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace UISystem
         [SerializeField] private MagicShopConfig shopConfig;
         [SerializeField] private Transform imageParent;
         [SerializeField] private MagicBuyPanel buyPanel;
+        [SerializeField] private DialogController dialogWindow;
         private readonly Dictionary<string, SpellShopConfig> _shopConfigs = new();
         private readonly List<MagicBuy> _buttons = new();
         
@@ -71,6 +73,7 @@ namespace UISystem
             _buttons.Clear();
             _shopConfigs.Clear();
             
+            dialogWindow.CloseDialog();
             panelObject.SetActive(false);
 
             stateController.IsShopOpen = false;

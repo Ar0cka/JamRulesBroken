@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e51333952774bf6a1434dac195e3adb, type: 3}
   m_Name: archer_arrow
   m_EditorClassIdentifier: 
-  <ProjectileSpeed>k__BackingField: 4
+  <ProjectileSpeed>k__BackingField: 10
   <ProjectileAnimation>k__BackingField: 
   <ProjectileVfx>k__BackingField: {fileID: 0}

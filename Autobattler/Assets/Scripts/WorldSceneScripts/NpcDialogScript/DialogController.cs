@@ -3,6 +3,7 @@ using ScriptableObjects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using WorldSceneScripts.NpcDialogScript;
 
 namespace DefaultNamespace.WorldSceneScripts.NpcDialogScript
 {
@@ -44,8 +45,9 @@ namespace DefaultNamespace.WorldSceneScripts.NpcDialogScript
             {
                 acceptButton.onClick.AddListener(() =>
                 {
-                    questController.AcceptQuest();
+                    questController.AcceptQuest(dialogConfig.QuestInfo);
                     ShowText(dialogConfig.AfterAcceptText, false);
+                    isAcceptedQuest = true;
                 });
                 
                 ShowText(dialogConfig.AcceptQuestText);
@@ -73,7 +75,7 @@ namespace DefaultNamespace.WorldSceneScripts.NpcDialogScript
             if (itemFromInventory.Amount < dialogConfig.QuestInfo.neededAmount)
             {
                 ShowText($"{dialogConfig.NotNeededResultText}\n" +
-                         $"{dialogConfig.QuestInfo.neededItems.ItemName}:{itemFromInventory.Amount}/{dialogConfig.QuestInfo.neededAmount}.", false);
+                         $"{dialogConfig.QuestInfo.neededItems.ItemName}: {itemFromInventory.Amount}/{dialogConfig.QuestInfo.neededAmount}.", false);
                 return;
             }
                 
@@ -81,16 +83,22 @@ namespace DefaultNamespace.WorldSceneScripts.NpcDialogScript
 
             if (!deleted)
             {
-                ShowText($"{dialogConfig.FailedText}", false);
+                ShowText($"{dialogConfig.NotNeededResultText}", false);
                 return;
             }
+            
+            questController.CompleteQuest(dialogConfig.QuestInfo.neededItems.ItemName);
+            isCompleted = true;
+            
+            ShowText(dialogConfig.QuestCompletedText, false);
         }
         
-        private void CloseDialog()
+        public void CloseDialog()
         {
             dialogWindow.SetActive(false);
             acceptButton.onClick.RemoveAllListeners();
             declineButton.onClick.RemoveAllListeners();
+            isDialogOpen = false;
         }
 
         private void ShowText(string text, bool acceptButtonActive = true, string acceptButtonText = "accept")

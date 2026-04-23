@@ -17,7 +17,12 @@ MonoBehaviour:
     spellType: 0
     spellElement: 0
     spellTarget: 0
-    spellDamage: 100
+    spellDamage: 30
     spellCost: 5
-  <SpellIcon>k__BackingField: {fileID: 21300000, guid: 58d54d71e0d5324558b9318446a4aa4a, type: 3}
-  <SpellVfx>k__BackingField: {fileID: 0}
+    spellSpeed: 10
+  <SpellIcon>k__BackingField: {fileID: 21300000, guid: 7e1b04966e189c01bbc0e9372cb6f7bf, type: 3}
+  <SpellVfx>k__BackingField: {fileID: 2706839447711178298, guid: e6bad3dde8a34d4d18049fbc27f396d3, type: 3}
+  <EffectData>k__BackingField:
+    EffectType: 1
+    Turns: 3
+  <AnimationName>k__BackingField: 
