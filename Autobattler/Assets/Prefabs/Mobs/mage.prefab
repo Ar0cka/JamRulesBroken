@@ -59,7 +59,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 719254015
+  m_SortingLayerID: 1937210021
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &2317378786884063577
@@ -346,8 +346,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1114987385
-  m_SortingLayer: 2
+  m_SortingLayerID: 159294605
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_Sprite: {fileID: -1993894004, guid: 443fe189ec9aadda78dc92a9791679a1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -409,8 +409,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitAnimator: {fileID: 4653935404075902065}
-  animationTimeHit: 0.3
-  animationTimeDead: 1
+  animationTimeHit: 0.4
+  animationTimeDead: 1.1
   hitPointText: {fileID: 6737062597001702067}
   textContainer: {fileID: 7218558891008541729}
   countBac: {fileID: 7366534018287734401}
@@ -428,8 +428,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 6172373612407178878}
   animator: {fileID: 4653935404075902065}
-  animationTime: 0.3
-  tilePrefab: {fileID: 9196427134604311428, guid: fbeefaa59048eaf7f93dfa34e679189d, type: 3}
+  animationTime: 0.45
+  tilePrefab: {fileID: 2636469012782827445, guid: 811f41b00923712f69a68b1999e3652e, type: 3}
   spawnPoint: {fileID: 209754639779469134}
 --- !u!114 &5470679342100255120
 MonoBehaviour:
@@ -448,6 +448,7 @@ MonoBehaviour:
   unitTakeHit: {fileID: 8790932821561734385}
   overlapRadius: 1
   overlapRadiusArea: 1.5
+  distance: 2
   objectParent: 0
 --- !u!50 &2897908938212357927
 Rigidbody2D:

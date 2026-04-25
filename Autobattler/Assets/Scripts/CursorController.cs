@@ -8,18 +8,14 @@ namespace DefaultNamespace
     public class CursorController : MonoBehaviour
     {
         [SerializeField] private Camera mainCamera;
-        [SerializeField] private Sprite cursorTexture;
         [SerializeField] private Vector2 hotspot;
         [SerializeField] private LayerMask targetMask;
         [SerializeField] private PlayerStateController playerStateController;
-        private Texture2D _cursorTexture;
+        
+        [SerializeField] private Texture2D shopCursorTexture;
+        [SerializeField] private Texture2D magicShopCursorTexture;
 
         private bool _cursorSet = false;
-        
-        private void Awake()
-        {
-            _cursorTexture = cursorTexture.texture;
-        }
 
         private void Update()
         {
@@ -34,17 +30,29 @@ namespace DefaultNamespace
             var hit = Physics2D.Raycast(mousePosition, Vector2.zero, Mathf.Infinity, targetMask);
 
             if (hit.collider != null && hit.collider.CompareTag("Shops"))
-                SetCursor();
+                SetShopCursor();
+            else if (hit.collider != null && hit.collider.CompareTag("MageShop"))
+                SetMagicShopCursor();
             else
                 UnsetCursor();
         }
         
-        private void SetCursor()
+        private void SetShopCursor()
         {
             if (_cursorSet)
                 return;
             
-            Cursor.SetCursor(_cursorTexture, hotspot, CursorMode.Auto);
+            Cursor.SetCursor(shopCursorTexture, hotspot, CursorMode.Auto);
+
+            _cursorSet = true;
+        }
+        
+        private void SetMagicShopCursor()
+        {
+            if (_cursorSet)
+                return;
+
+            Cursor.SetCursor(magicShopCursorTexture, hotspot, CursorMode.Auto);
 
             _cursorSet = true;
         }

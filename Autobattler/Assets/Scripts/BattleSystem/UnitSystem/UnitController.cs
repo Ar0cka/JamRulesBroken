@@ -22,31 +22,39 @@ namespace BattleSystem
         [Header("Settings")]
         [SerializeField] private float overlapRadius = 1;
         [SerializeField] private float overlapRadiusArea = 1.5f;
-        
+        [SerializeField] private float distance = 2f;
         private UnitData _data;
         
         [HideInInspector] public ObjectParent objectParent;
 
         private Func<string, ObjectParent, bool> _deadFunc;
         private Action _deadAction;
-        private Bfs _bfs;
+        private GridSystem _gridSystem;
 
         public int ActionPoints { get; private set; }
         public string UnitName => _data.UnitConfig.UnitName;
         
-        public void InitializeUnit(UnitData data, ObjectParent parent, Func<string, ObjectParent, bool> deadFunc, Bfs bfs)
+        public void InitializeUnit(UnitData data, ObjectParent parent, Func<string, ObjectParent, bool> deadFunc, GridSystem gridSystem)
         {
             _data = data;
             _deadFunc = deadFunc;
             objectParent = parent;
-            _bfs = bfs;
+            _gridSystem = gridSystem;
+          
             
             _deadAction = UnitIsDead;
             unitTakeHit.InitializeUnitHitPoints(data, parent);
         }
         
         public UnitData GetData() => _data;
-        public void SetUnitPosition(int x, int y, Vector2 worldPos) => _data.SetPosition(x, y, worldPos);
+        public void SetUnitPosition(int x, int y, Vector2 worldPos)
+        {
+            if (_data.X != -1 && _data.Y != -1) 
+                _gridSystem.SetWalkable(_data.X, _data.Y, true);
+            
+            _data.SetPosition(x, y, worldPos);
+            _gridSystem.SetWalkable(x, y, false);
+        }
 
         public IEnumerator UnitTurnActions(List<GridData> targetPath)
         {
@@ -70,7 +78,6 @@ namespace BattleSystem
                 Vector2 targetPosition = new Vector2(path.WorldX, path.WorldY);
 #if UNITY_EDITOR
                 _targetPosition = targetPosition;
-
 #endif
                 var hitAll = Physics2D.OverlapCircleAll(targetPosition, overlapRadius);
 
@@ -149,7 +156,11 @@ namespace BattleSystem
         
         private void UnitIsDead()
         {
-            _deadFunc.Invoke(_data.UnitConfig.UnitName, objectParent);
+            var delted = _deadFunc.Invoke(_data.UnitConfig.UnitName, objectParent);
+            
+            if (delted)
+                Destroy(gameObject);
+            
         }
 
 #if UNITY_EDITOR

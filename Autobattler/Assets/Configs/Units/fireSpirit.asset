@@ -17,8 +17,8 @@ MonoBehaviour:
     speed: 3
     acceleration: 0
   <Stats>k__BackingField:
-    health: 20
-    attack: 6
+    health: 10
+    attack: 4
     defense: 4
     maxCellsInTurn: 3
     initiative: 3

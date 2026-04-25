@@ -18,9 +18,9 @@ namespace BattleSystem.UnitSystem.data
         public EffectUnitData CurrentEffectData;
         
         public Vector2 CurrentWorldPosition { get; private set; }
-        
-        public int X { get; private set; }
-        public int Y { get; private set; }
+
+        public int X { get; private set; } = -1;
+        public int Y { get; private set; } = -1;
         
         [field:SerializeField] public UnitConfigs UnitConfig { get; private set; }
         [field:SerializeField] public int Count { get; private set; }
@@ -35,6 +35,11 @@ namespace BattleSystem.UnitSystem.data
         public void SetNewEffectData()
         {
             CurrentEffectData = new EffectUnitData();
+        }
+
+        public void SetNewCount(int newCount)
+        {
+            Count = newCount;
         }
     }
 }

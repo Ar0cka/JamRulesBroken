@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Shops
   - Unit
+  - MageShop
+  - Enemy
+  - Boss
   layers:
   - Default
   - TransparentFX
@@ -69,6 +72,12 @@ TagManager:
     locked: 0
   - name: DialogUI
     uniqueID: 3985609851
+    locked: 0
+  - name: HexBattle
+    uniqueID: 758072083
+    locked: 0
+  - name: unitBattle
+    uniqueID: 159294605
     locked: 0
   - name: Hude
     uniqueID: 1937210021

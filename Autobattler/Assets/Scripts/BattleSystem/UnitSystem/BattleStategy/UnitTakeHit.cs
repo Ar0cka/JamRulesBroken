@@ -26,6 +26,8 @@ namespace BattleSystem.BattleStategy
 
         private int _count;
         private int Count { get => _count; set { _count = value; UpdateHitPointText(); } }
+        
+        private UnitData _unitData;
 
         public void InitializeUnitHitPoints(UnitData unitData, ObjectParent objectParent)
         {
@@ -34,6 +36,7 @@ namespace BattleSystem.BattleStategy
             
             Count = unitData.Count;
             var unitConfig = unitData.UnitConfig;
+            _unitData = unitData;
             
             _currentHitPoints = unitConfig.Stats.health * Count;
             _oneCountHitPoints = unitConfig.Stats.health;
@@ -53,12 +56,13 @@ namespace BattleSystem.BattleStategy
             
             Count = Mathf.CeilToInt((float)_currentHitPoints / _oneCountHitPoints);
 
+            _unitData.SetNewCount(Count);
+            
             if (Count <= 0)
             {
                 unitAnimator.SetTrigger(unitConfig.Animation.death);
-                unitDeadAction?.Invoke();
                 yield return new WaitForSeconds(animationTimeDead);
-                Destroy(gameObject);
+                unitDeadAction?.Invoke();
                 Debug.Log($"{gameObject.name} is dead :(");
                 yield break;
             }
@@ -72,6 +76,8 @@ namespace BattleSystem.BattleStategy
             _currentHitPoints += unitHeal;
 
             Count = _currentHitPoints <= _oneCountHitPoints ? 1 : Mathf.RoundToInt((float)_currentHitPoints / _oneCountHitPoints);
+            
+            _unitData.SetNewCount(Count);
             
             UpdateHitPointText();
         }

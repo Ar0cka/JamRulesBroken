@@ -18,7 +18,7 @@ namespace Player
                 
                 var hit = Physics2D.Raycast(mouserDirection, Vector2.zero, Mathf.Infinity, layerMask);
                 
-                if (hit.collider != null && hit.collider.CompareTag("Shops"))
+                if (hit.collider != null && (hit.collider.CompareTag("Shops") || hit.collider.CompareTag("MageShop")))
                 {
                     var shop = hit.collider.gameObject.GetComponent<IShop>();
                     shop.EnterToShop();

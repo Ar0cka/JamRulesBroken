@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Grid;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace DefaultNamespace.Pathfiender
     public class Bfs : MonoBehaviour
     {
         [SerializeField] private GridSystem gridSystem;
+        [SerializeField] private float radius;
         
         public List<GridData> CalculatePath(int startX, int startY, int endX, int endY)
         {
@@ -23,7 +25,7 @@ namespace DefaultNamespace.Pathfiender
         
                 if (current.x == endX && current.y == endY)
                     break;
-        
+                
                 foreach (var neighbor in gridSystem.GetNeighborCoords(current.x, current.y))
                 {
                     if (!visited.Contains(neighbor))

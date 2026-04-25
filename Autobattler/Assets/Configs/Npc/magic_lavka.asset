@@ -30,3 +30,4 @@ MonoBehaviour:
     questDescription: Find flowers in one of the dungeon biomes
     neededItems: {fileID: 11400000, guid: 96788bf69154bc6c0aec42ed204cf1fb, type: 2}
     neededAmount: 4
+    cashForQuest: 2500

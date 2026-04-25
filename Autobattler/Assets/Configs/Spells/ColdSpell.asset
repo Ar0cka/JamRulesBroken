@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ColdSpell
   m_EditorClassIdentifier: 
   <SpellName>k__BackingField: cold spell
+  <Description>k__BackingField: Slows the unit by 1 action point.
   <SpellStats>k__BackingField:
     spellType: 2
     spellElement: 1
@@ -24,5 +25,5 @@ MonoBehaviour:
   <SpellVfx>k__BackingField: {fileID: 6056936061807782677, guid: b3ff1fddb4fe2390a93311ec969f3669, type: 3}
   <EffectData>k__BackingField:
     EffectType: 0
-    Turns: 2
+    Turns: 3
   <AnimationName>k__BackingField: Rotate

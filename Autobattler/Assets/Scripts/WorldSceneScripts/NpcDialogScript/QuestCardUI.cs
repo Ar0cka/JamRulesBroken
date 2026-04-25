@@ -1,4 +1,5 @@
 using ScriptableObjects;
+using ShopSystem;
 using TMPro;
 using UnityEngine;
 
@@ -12,9 +13,12 @@ namespace DefaultNamespace.WorldSceneScripts.NpcDialogScript
         private QuestState _questState;
         private QuestData _questData;
         
-        public void SetQuest(QuestData questData, int amount = 0)
+        private Wallet _playerWallet;
+        
+        public void SetQuest(QuestData questData, Wallet playerWallet, int amount = 0)
         {
             _questState = QuestState.Active;
+            _playerWallet = playerWallet;
             
             _questData = questData;
             
@@ -39,6 +43,7 @@ namespace DefaultNamespace.WorldSceneScripts.NpcDialogScript
         {
             _questState = QuestState.Completed;
             questTitleText.text = $"{_questState}:{_questData.questName}";
+            _playerWallet.AddMoney(_questData.cashForQuest);
         }
     }
 

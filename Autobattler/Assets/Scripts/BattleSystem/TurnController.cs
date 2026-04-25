@@ -43,8 +43,11 @@ namespace BattleSystem
         private int _currentTurn;
 
         private bool _isEnd;
-        private bool _isTurn;
+        public bool IsTurn { get; private set; }
         private bool _isInitialized = false;
+
+        private UnitController _currentUnit;
+        private Coroutine _unitCoroutine;
         
         public void Initialize(SendToBattleData data, Action<SendToOutputData> outputDataEvent)
         {
@@ -62,10 +65,10 @@ namespace BattleSystem
             
             WaitActionPlayer += () =>
             {
-                if (_isTurn)
+                if (IsTurn)
                     return;
 
-                _isTurn = true;
+                IsTurn = true;
                 StartCoroutine(StartUnitsActions());
             };
             
@@ -85,69 +88,71 @@ namespace BattleSystem
                 EndBattle();
             }
             
-            endPlayerTurnButton.interactable = !_isTurn;
+            endPlayerTurnButton.interactable = !IsTurn;
         }
 
         private IEnumerator StartUnitsActions()
         {
             while (_turnQueue.Count > 0)
             {
-                var unit = _turnQueue.Dequeue();
+                _currentUnit = _turnQueue.Dequeue();
                 
-                if (unit == null || !IsHaveInDictionary(unit.UnitName))
+                if (_currentUnit == null || !IsHaveInDictionary(_currentUnit.UnitName))
                 {
                     continue;
                 }
 
-                if (unit.GetData().UnitConfig.Type == UnitType.Range)
+                if (_currentUnit.GetData().UnitConfig.Type == UnitType.Range)
                 {
-                    var hit = Physics2D.OverlapCircleAll(unit.transform.position, overlapRadius);
-
+                    var hit = Physics2D.OverlapCircleAll(_currentUnit.transform.position, overlapRadius);
 #if UNITY_EDITOR
-                    overlapVector = unit.transform.position;
+                    overlapVector = _currentUnit.transform.position;
 #endif
 
-                    if (hit.Any(h => h.CompareTag("Unit") && h.GetComponent<UnitController>().objectParent != unit.objectParent))
+                    if (hit.Any(h => h.CompareTag("Unit") && h.GetComponent<UnitController>().objectParent != _currentUnit.objectParent))
                     {
-                        var freeSell = gridSystem.GetFreeCells(unit.GetData().X, unit.GetData().Y, 0.5f);
+                        var freeSell = gridSystem.GetFreeCells(_currentUnit.GetData().X, _currentUnit.GetData().Y, 0.5f);
                         
-                        if (freeSell != null && unit == null || !IsHaveInDictionary(unit.UnitName))
+                        if (freeSell != null)
                         {
-                            if (unit == null || !IsHaveInDictionary(unit.UnitName)) 
+                            if (_currentUnit == null || !IsHaveInDictionary(_currentUnit.UnitName)) 
                                 continue;
                             
                             var targetVector = new Vector2(freeSell.WorldX, freeSell.WorldY);
                             
-                            yield return unit.Move(targetVector);
-                            unit.SetUnitPosition(freeSell.X, freeSell.Y, targetVector);
+                            yield return _currentUnit.Move(targetVector);
+                            _currentUnit.SetUnitPosition(freeSell.X, freeSell.Y, targetVector);
                         }
                         
-                        var hitFirst = hit.FirstOrDefault(x => x.CompareTag("Unit"));
+                        var hitFirst = hit.FirstOrDefault(x => x.CompareTag("Unit") && x.GetComponent<UnitController>().objectParent != _currentUnit.objectParent);
                         
                         if (hitFirst != null)
                         {
-                            if (unit == null || !IsHaveInDictionary(unit.UnitName)) 
+                            if (_currentUnit == null || !IsHaveInDictionary(_currentUnit.UnitName)) 
                                 continue;
                             
                             var unitControllerUnitRange = hitFirst.GetComponent<UnitController>();
-                            yield return StartCoroutine(unit.Attack(unitControllerUnitRange));
+                            yield return StartCoroutine(_currentUnit.Attack(unitControllerUnitRange));
                             continue;
                         }
                     }
-                    if (unit == null || !IsHaveInDictionary(unit.UnitName))
+                    if (_currentUnit == null || !IsHaveInDictionary(_currentUnit.UnitName))
                         continue;
-                    var unitTarget = GetRandomEnemyUnit(unit);
-                    yield return StartCoroutine(unit.Attack(unitTarget));
+                    
+                    var unitTarget = GetRandomEnemyUnit(_currentUnit);
+                    yield return StartCoroutine(_currentUnit.Attack(unitTarget));
+                    yield return new WaitForSeconds(0.5f);
                     continue;
                 }
                 
-                var targetUnit = FindTarget(unit.objectParent, unit.transform);
+                var targetUnit = FindTarget(_currentUnit.objectParent, _currentUnit.transform);
 
                 var data = targetUnit.GetData();
                 
-                var path = pathfinder.CalculatePath(unit.GetData().X, unit.GetData().Y, data.X, data.Y);
+                var path = pathfinder.CalculatePath(_currentUnit.GetData().X, _currentUnit.GetData().Y, data.X, data.Y);
 
-                yield return unit.UnitTurnActions(path);
+                yield return _currentUnit.UnitTurnActions(path);
+                yield return new WaitForSeconds(0.5f);
             }
             
             CreateNextTurn();
@@ -164,9 +169,6 @@ namespace BattleSystem
                     continue;
                 
                 var unitController = target.GetComponent<UnitController>();
-                
-                if (unitController.GetData().UnitConfig.Type != UnitType.Range)
-                    continue;
                 
                 if (unitController.objectParent == currentUnitType) continue;
 
@@ -211,7 +213,7 @@ namespace BattleSystem
             unitObject.name = $"{unitObject.name}:{parent}";
             
             var unitController = unitObject.GetComponent<UnitController>();
-            unitController.InitializeUnit(unit, parent, _isUnitDead, pathfinder);
+            unitController.InitializeUnit(unit, parent, _isUnitDead, gridSystem);
 
             if (unitController.objectParent == ObjectParent.Enemy)
             {
@@ -229,7 +231,7 @@ namespace BattleSystem
         {
             _currentTurn++;
             
-            _isTurn = false;
+            IsTurn = false;
             playerCast.UnsetCastInBeginTurn();
             
             UpdateUI();

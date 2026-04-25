@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: FireSpell
   m_EditorClassIdentifier: 
   <SpellName>k__BackingField: fireball
+  <Description>k__BackingField: Deals fire damage to a squad
   <SpellStats>k__BackingField:
     spellType: 0
     spellElement: 0
     spellTarget: 0
-    spellDamage: 30
+    spellDamage: 50
     spellCost: 5
     spellSpeed: 10
   <SpellIcon>k__BackingField: {fileID: 21300000, guid: 7e1b04966e189c01bbc0e9372cb6f7bf, type: 3}

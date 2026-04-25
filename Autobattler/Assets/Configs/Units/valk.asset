@@ -17,11 +17,11 @@ MonoBehaviour:
     speed: 4
     acceleration: 0
   <Stats>k__BackingField:
-    health: 40
-    attack: 8
+    health: 50
+    attack: 15
     defense: 0
-    maxCellsInTurn: 3
-    initiative: 3
+    maxCellsInTurn: 4
+    initiative: 4
   <Animation>k__BackingField:
     walk: IsWalk
     death: IsDead

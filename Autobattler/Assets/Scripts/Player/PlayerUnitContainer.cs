@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BattleSystem.UnitSystem.data;
 using ScriptableObjects;
 using TMPro;
 using UISystem;
@@ -15,6 +16,7 @@ namespace Player
         [SerializeField] private List<HydeUnits> unitsImage;
         
         private readonly Dictionary<string, PlayerUnit> _playerUnits = new();
+        public Dictionary<string, PlayerUnit> PlayerUnits => _playerUnits;
 
         private void Awake()
         {
@@ -67,8 +69,29 @@ namespace Player
                 _playerUnits[deletedUnitName] = null;
         }
 
+        public void RebuildUnitsAfterFight(List<UnitData> unitData)
+        {
+            _playerUnits.Clear();
+
+            foreach (var data in unitData)
+            {
+                _playerUnits.Add(data.UnitConfig.UnitName, new PlayerUnit
+                {
+                    unitConfig = data.UnitConfig,
+                    unitCount = data.Count
+                });
+            }
+            
+            UpdateImages();
+        }
+
         private void UpdateImages()
         {
+            foreach (var image in unitsImage)
+            {
+                image.gameObject.SetActive(false);
+            }
+            
             for (int i = 0; i < unitsImage.Count; i++)
             {
                 if (i >= _playerUnits.Count)
@@ -77,11 +100,6 @@ namespace Player
                 }
                 
                 var value = _playerUnits.ElementAt(i).Value;
-                if (value.unitCount == 0)
-                {
-                    unitsImage[i].gameObject.SetActive(false);
-                    continue;
-                }
                 
                 if (!unitsImage[i].gameObject.activeInHierarchy)
                     unitsImage[i].gameObject.SetActive(true);

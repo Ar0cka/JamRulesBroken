@@ -8,6 +8,7 @@ namespace ScriptableObjects
     public class SpellConfig : ScriptableObject
     {
         [field:SerializeField] public string SpellName { get; private set; }
+        [field:SerializeField] public string Description { get; private set; }
         [field:SerializeField] public SpellStats SpellStats { get; private set; }
         [field:SerializeField] public Sprite SpellIcon { get; private set; }
         [field: SerializeField] public GameObject SpellVfx { get; private set;}

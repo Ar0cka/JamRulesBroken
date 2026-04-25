@@ -18,10 +18,16 @@ namespace BattleSystem
         [SerializeField] private ErrorMessage errorMessage;
 
         [SerializeField] private PlayerCastSystem playerCastSystem;
+        [SerializeField] private TurnController turnController;
+        [SerializeField] private Button openBookButton;
      
         private List<SpellCardSettings> _spellChooseButtons = new();
-        
-        
+
+        private void Update()
+        {
+            openBookButton.interactable = !turnController.IsTurn;
+        }
+
         public void Initialize(List<SpellConfig> spells)
         {
             if (spellBookPrefab.activeSelf)
@@ -32,6 +38,7 @@ namespace BattleSystem
                 if (!playerCastSystem.IsCanCast)
                 {
                     errorMessage.OpenPanel( ErrorType.SpellType,"Failed to cast spell. You dont have spell action");
+                    return;
                 }
                 
                 playerCastSystem.SetSpellName(spellName);
@@ -50,7 +57,7 @@ namespace BattleSystem
 
         public void EnablePanel()
         {
-            if (spellBookPrefab.activeSelf)
+            if (spellBookPrefab.activeSelf || turnController.IsTurn)
                 return;
 
             spellBookPrefab.SetActive(true);

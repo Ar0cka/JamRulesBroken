@@ -9,6 +9,8 @@ namespace Player
         
         public bool CanMove = false;
         public bool IsShopOpen = false;
+        public bool IsBookOpen = false;
+        public bool IsDialogWindow = false;
 
         private void Update()
         {

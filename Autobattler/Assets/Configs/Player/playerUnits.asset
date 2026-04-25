@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: playerUnits
   m_EditorClassIdentifier: 
   startUnits:
+  - unitConfig: {fileID: 11400000, guid: 3fd37028e51e7199689888ca123e1005, type: 2}
+    unitCount: 40
   - unitConfig: {fileID: 11400000, guid: 3aeb9ab0efe92ab6482bbc7493ebc1e6, type: 2}
-    unitCount: 10
-  - unitConfig: {fileID: 11400000, guid: 61e8e42cdaaf2373e87dda250f60dbeb, type: 2}
-    unitCount: 100
+    unitCount: 60
+  - unitConfig: {fileID: 11400000, guid: 57e7185b0ce905e608a8b21b86732edb, type: 2}
+    unitCount: 35

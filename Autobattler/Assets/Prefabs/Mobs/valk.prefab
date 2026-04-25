@@ -320,8 +320,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1114987385
-  m_SortingLayer: 2
+  m_SortingLayerID: 159294605
+  m_SortingLayer: 11
   m_SortingOrder: 0
   m_Sprite: {fileID: 509050935, guid: 811ce8b20dc5f45ea92a8326ea1e19d6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitAnimator: {fileID: 4292949608874847192}
-  animationTimeHit: 0.3
+  animationTimeHit: 0.6
   animationTimeDead: 1
   hitPointText: {fileID: 7308803577189916180}
   textContainer: {fileID: 724194902507901968}
@@ -402,7 +402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 2483326587642942936}
   animator: {fileID: 4292949608874847192}
-  animationTime: 0.8
+  animationTime: 0.35
 --- !u!114 &3875687923158911056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,7 +419,8 @@ MonoBehaviour:
   unitAttack: {fileID: 5820580379578743589}
   unitTakeHit: {fileID: 851321333511849847}
   overlapRadius: 0.5
-  overlapRadiusArea: 1.5
+  overlapRadiusArea: 1
+  distance: 2
   objectParent: 0
 --- !u!50 &2746892151258488414
 Rigidbody2D:
@@ -552,7 +553,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 719254015
+  m_SortingLayerID: 1937210021
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &2607430032739637709

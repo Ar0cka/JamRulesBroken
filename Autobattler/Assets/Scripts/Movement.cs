@@ -26,16 +26,9 @@ public class Movement : MonoBehaviour
     
     public void Update()
     {
-        if (!playerStateController.CanMove || playerStateController.IsShopOpen)
+        if (!playerStateController.CanMove || playerStateController.IsShopOpen || playerStateController.IsBookOpen || playerStateController.IsDialogWindow)
         {
-            rigidbody2D.velocity = Vector2.zero;
-            _mouseInputCoordinate = Vector2.zero;
-            
-            if (IsWalking)
-            {
-                animator.SetBool(animationWalkName, false);
-                IsWalking = false;
-            }
+            ResetMovement();
             
             return;
         }
@@ -44,6 +37,18 @@ public class Movement : MonoBehaviour
         Move();
     }
 
+    public void ResetMovement()
+    {
+        rigidbody2D.velocity = Vector2.zero;
+        _mouseInputCoordinate = Vector2.zero;
+            
+        if (IsWalking)
+        {
+            animator.SetBool(animationWalkName, false);
+            IsWalking = false;
+        }
+    }
+    
     private void ClickListener()
     {
         if (Input.GetMouseButton(0))

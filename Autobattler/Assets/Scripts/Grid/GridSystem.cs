@@ -133,6 +133,11 @@ namespace Grid
             return (cellsX - 1, randomY);
         }
 
+        public void SetWalkable(int x, int y, bool value)
+        {
+            _gridData[x, y].IsWalkable = value;
+        }
+        
         public GridData GetFreeCells(int x, int y, float overlapRadius)
         {
             var neighbor = GetNeighborCoords(x, y);

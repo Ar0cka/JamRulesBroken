@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DefaultNamespace.WorldSceneScripts.NpcDialogScript;
 using Player;
 using ScriptableObjects;
+using ShopSystem;
 using UnityEngine;
 
 namespace WorldSceneScripts.NpcDialogScript
@@ -12,6 +13,7 @@ namespace WorldSceneScripts.NpcDialogScript
         [SerializeField] private Transform questCardParent;
 
         [SerializeField] private PlayerInventory playerInventory;
+        [SerializeField] private Wallet playerWallet;
         
         private readonly Dictionary<string, QuestCardUI> _questCards = new();
 
@@ -41,7 +43,7 @@ namespace WorldSceneScripts.NpcDialogScript
                 amount = item.Amount;
             }
             
-            questCardUi.SetQuest(data, amount);
+            questCardUi.SetQuest(data, playerWallet, amount);
             
             _questCards.Add(data.neededItems.ItemName, questCardUi);
         }

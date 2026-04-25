@@ -4,5 +4,6 @@ namespace Grid
     {
         public int X, Y;
         public float WorldX, WorldY;
+        public bool IsWalkable = true;
     }
 }

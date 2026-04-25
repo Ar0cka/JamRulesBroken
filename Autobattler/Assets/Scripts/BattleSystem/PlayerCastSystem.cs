@@ -16,6 +16,7 @@ namespace BattleSystem
         [SerializeField] private Transform spellPosition;
         [SerializeField] private TextMeshProUGUI spellNameBox;
         [SerializeField] private ErrorMessage errorMessage;
+        [SerializeField] private TurnController turnController;
         private Dictionary<string, SpellConfig> _playerSpellList = new();
 
         private string _chooseSpell = "";
@@ -25,7 +26,7 @@ namespace BattleSystem
 
         private void Update()
         {
-            if (EventSystem.current.IsPointerOverGameObject() || _playerSpellList.Count == 0)
+            if (EventSystem.current.IsPointerOverGameObject() || _playerSpellList.Count == 0 || turnController.IsTurn)
                 return;
 
             if (!string.IsNullOrEmpty(_chooseSpell) && Input.GetMouseButtonDown(0) && !isCast && IsCanCast)
