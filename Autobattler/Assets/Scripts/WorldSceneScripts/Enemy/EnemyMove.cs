@@ -27,7 +27,7 @@ namespace WorldSceneScripts.Enemy
                 MoveToPlayer();
             
             animator.SetBool(Config.Animations.walk, IsMove());
-            spriteRenderer.flipX = rb2D.velocity.x < 0;
+            spriteRenderer.flipX = rb2D.linearVelocity.x < 0;
         }
 
         private void MovePatrol()
@@ -41,7 +41,7 @@ namespace WorldSceneScripts.Enemy
                 _patrolVectorQueue.Enqueue(_currentPatrolPoint);
             }
             
-            rb2D.velocity = (_currentPatrolPoint - rb2D.position).normalized * Config.EnemyStats.speed;
+            rb2D.linearVelocity = (_currentPatrolPoint - rb2D.position).normalized * Config.EnemyStats.speed;
         }
 
         private void MoveToPlayer()
@@ -54,7 +54,7 @@ namespace WorldSceneScripts.Enemy
             
             var direction = (_currentPlayerPosition.position - transform.position).normalized;
 
-            rb2D.velocity = direction * Config.EnemyStats.speed;
+            rb2D.linearVelocity = direction * Config.EnemyStats.speed;
         }
 
         private bool CheckDistance(Vector2 targetPosition)
@@ -64,7 +64,7 @@ namespace WorldSceneScripts.Enemy
 
         private bool IsMove()
         {
-            return Mathf.Abs(rb2D.velocity.x) > 0.1f || Mathf.Abs(rb2D.velocity.y) > 0.1f;
+            return Mathf.Abs(rb2D.linearVelocity.x) > 0.1f || Mathf.Abs(rb2D.linearVelocity.y) > 0.1f;
         }
         
         private void OnTriggerEnter2D(Collider2D other)

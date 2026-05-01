@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using DefaultNamespace.WorldSceneScripts.NpcDialogScript;
 using Player;
+using Player.PlayerProviders;
+using Player.StateController;
 using ScriptableObjects;
 using TMPro;
 using UnityEngine;
@@ -21,16 +23,18 @@ namespace UISystem
         [SerializeField] private BuyPanelSystem buyPanel;
         private readonly Dictionary<string, UnitShopConfig> _shopConfigs = new();
         private readonly List<BuyButton> _buttons = new();
-        
-        [SerializeField] private PlayerStateController stateController;
+
+        private IStateProvider _provider;
 
         private bool _isOpen;
-        
-        public void EnterToShop()
+
+        public void EnterToShop(IStateProvider stateProvider)
         {
             if (_isOpen) return;
 
-            stateController.IsShopOpen = true;
+            _provider = stateProvider;
+
+            _provider.SwitchPlayerState(PlayerStates.IsDialogWindow, true);
             
             foreach (var unit in shopConfig.UnitConfigs)
             {
@@ -76,7 +80,7 @@ namespace UISystem
             dialogWindow.CloseDialog();
             panelObject.SetActive(false);
 
-            stateController.IsShopOpen = false;
+            _provider.SwitchPlayerState(PlayerStates.IsDialogWindow, false);
 
             if (buyPanel.gameObject.activeInHierarchy)
             {

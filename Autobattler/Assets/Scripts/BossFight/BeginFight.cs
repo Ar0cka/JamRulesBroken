@@ -1,19 +1,16 @@
-using System;
-using System.Collections;
+using DefaultNamespace.BossFight;
 using Player;
 using ScriptableObjects;
 using ScriptableObjects.WorldSceneConfigs;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace DefaultNamespace.BossFight
+namespace BossFight
 {
     public class BeginFight : MonoBehaviour
     {
         [SerializeField] private BossPanel bossPanel;
         [SerializeField] private PlayerInventory playerInventory;
         [SerializeField] private PlayerFightAnimation playerFight;
-        [SerializeField] private PlayerStateController playerStateController;
 
         [SerializeField] private EnemyWorldSceneConfig enemyConfig;
         [SerializeField] private ItemConfig flower;
@@ -31,7 +28,6 @@ namespace DefaultNamespace.BossFight
 
             if (itemSlot.Amount > 0)
             {
-                playerStateController.IsDialogWindow = true;
                 bossPanel.OpenPanel(enemyConfig, gameObject);
             }
         }

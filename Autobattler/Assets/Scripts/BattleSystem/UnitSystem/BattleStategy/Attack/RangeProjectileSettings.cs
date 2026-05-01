@@ -15,7 +15,7 @@ namespace BattleSystem.BattleStategy
             while (Vector2.Distance(transform.position, targetPosition) > stoppingDistance)
             {
                 var direction = (targetPosition - (Vector2)transform.position).normalized;
-                rigidbody2D.velocity = direction * projectileSettings.ProjectileSpeed;
+                rigidbody2D.linearVelocity = direction * projectileSettings.ProjectileSpeed;
                 
                 var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
                 transform.rotation = Quaternion.Euler(0, 0, angle);
@@ -23,7 +23,7 @@ namespace BattleSystem.BattleStategy
                 yield return null;
             }
 
-            rigidbody2D.velocity = Vector2.zero;
+            rigidbody2D.linearVelocity = Vector2.zero;
             Destroy(gameObject);
         }
     }

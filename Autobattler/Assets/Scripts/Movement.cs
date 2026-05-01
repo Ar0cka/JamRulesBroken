@@ -39,7 +39,7 @@ public class Movement : MonoBehaviour
 
     public void ResetMovement()
     {
-        rigidbody2D.velocity = Vector2.zero;
+        rigidbody2D.linearVelocity = Vector2.zero;
         _mouseInputCoordinate = Vector2.zero;
             
         if (IsWalking)
@@ -66,7 +66,7 @@ public class Movement : MonoBehaviour
         spriteRenderer.flipX = _mouseInputCoordinate.x < transform.position.x;
         
         Vector2 moveDirection = (_mouseInputCoordinate - (Vector2)transform.position).normalized;
-        rigidbody2D.velocity = moveDirection * playerConfig.Speed;
+        rigidbody2D.linearVelocity = moveDirection * playerConfig.Speed;
         
         if (!IsWalking)
         {
@@ -83,7 +83,7 @@ public class Movement : MonoBehaviour
         if (Vector2.Distance(transform.position, _mouseInputCoordinate) < DistanceToEndMove)
         {
             _mouseInputCoordinate = Vector2.zero;
-            rigidbody2D.velocity = Vector2.zero;
+            rigidbody2D.linearVelocity = Vector2.zero;
 
             animator.SetBool(animationWalkName, false);
             IsWalking = false;

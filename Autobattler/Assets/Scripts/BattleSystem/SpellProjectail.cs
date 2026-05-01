@@ -44,7 +44,7 @@ namespace BattleSystem
         {
             while (Vector2.Distance(rb.position, targetPosition) > distance)
             {
-                rb.velocity = (targetPosition - rb.position).normalized * speed;
+                rb.linearVelocity = (targetPosition - rb.position).normalized * speed;
                 yield return null;
             }
         }

@@ -24,13 +24,13 @@ namespace BattleSystem
             {
                 var direction = targetPath - rigidbody2D.position;
                 spriteRenderer.flipX = direction.x < 0;
-                rigidbody2D.velocity = direction.normalized * speed;
+                rigidbody2D.linearVelocity = direction.normalized * speed;
                 
                 yield return null;
             }
             
             rigidbody2D.position = targetPath;
-            rigidbody2D.velocity = Vector2.zero;
+            rigidbody2D.linearVelocity = Vector2.zero;
 
             animator.SetBool(animationName, false);
 
