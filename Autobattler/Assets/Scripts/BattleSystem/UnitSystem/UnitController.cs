@@ -148,7 +148,7 @@ namespace BattleSystem
             if (_data.CurrentEffectData.EffectType == EffectType.Fire)
             {
                 yield return StartCoroutine(unitTakeHit.TakeHit(_data.UnitConfig, _deadAction,
-                    _data.CurrentEffectData.CurrentSpellData.SpellStats.spellDamage));
+                    _data.CurrentEffectData.CurrentSpellData.SpellData.spellDamage));
             }
         }
         

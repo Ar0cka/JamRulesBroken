@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using DefaultNamespace.WorldSceneScripts.NpcDialogScript;
 using Player;
+using Player.PlayerProviders;
+using Player.StateController;
 using ScriptableObjects;
+using UISystem.ShopButton;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UISystem
 {
-    public class MagicLavkaUI : MonoBehaviour, IShop
+    public class MagicLavkaUI : ShopsAbstract<SpellShopConfig, SpellConfig>
     {
         [SerializeField] private GameObject panelObject;
         [SerializeField] private GameObject imagePrefab;
@@ -16,67 +19,39 @@ namespace UISystem
         [SerializeField] private Transform imageParent;
         [SerializeField] private MagicBuyPanel buyPanel;
         [SerializeField] private DialogController dialogWindow;
-        private readonly Dictionary<string, SpellShopConfig> _shopConfigs = new();
-        private readonly List<MagicBuy> _buttons = new();
         
-        [SerializeField] private PlayerStateController stateController;
-
-        private bool _isOpen;
         private List<SpellShopConfig> _magicList = new();
-        
-        public void EnterToShop()
+
+        protected override void InitializeShopCollection()
         {
-            if (_isOpen) return;
-
-            stateController.IsShopOpen = true;
-
-            _magicList = shopConfig.Clone();
-            
             foreach (var spellConfig in _magicList)
             {
-                _shopConfigs.TryAdd(spellConfig.config.SpellName, spellConfig);
+                ShopConfigs.TryAdd(spellConfig.config., spellConfig);
             }
 
-            foreach (var conf in _shopConfigs.Values)
+            foreach (var conf in ShopConfigs.Values)
             {
                 var gamePrefab = Instantiate(imagePrefab, imageParent, false);
-                var buttonInitialize = gamePrefab.GetComponent<MagicBuy>();
+                var buttonInitialize = gamePrefab.GetComponent<BaseBuyButton<SpellConfig>>();
                 buttonInitialize.Initialize(conf, buyPanel);
-                _buttons.Add(buttonInitialize);
-            }
-            
-            exitButton.onClick.AddListener(Exit);
-            panelObject.SetActive(true);
-            _isOpen = true;
-        }
-
-        public void BuyEnd(string unitName, SpellShopConfig changedConfig)
-        {
-            _shopConfigs[unitName] = changedConfig;
-
-            foreach (var button in _buttons)
-            {
-                if (_shopConfigs.TryGetValue(button.CurrentSpell, out var value))
-                {
-                    button.UpdateButtonData(value);
-                }
+                BuyButtons.Add(buttonInitialize);
             }
         }
 
         public void Exit()
         {
-            foreach (var button in _buttons)
+            foreach (var button in BuyButtons)
             {
                 button.Destroy();
             }
             
-            _buttons.Clear();
-            _shopConfigs.Clear();
+            BuyButtons.Clear();
+            ShopConfigs.Clear();
             
             dialogWindow.CloseDialog();
             panelObject.SetActive(false);
 
-            stateController.IsShopOpen = false;
+            StateProvider.SwitchPlayerState(PlayerStates.IsDialogWindow, false);
 
             if (buyPanel.gameObject.activeInHierarchy)
             {

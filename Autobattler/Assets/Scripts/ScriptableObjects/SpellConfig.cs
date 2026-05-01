@@ -1,30 +1,58 @@
 using System;
 using BattleSystem.UnitSystem.data;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ScriptableObjects
 {
     [CreateAssetMenu(fileName = "New Spell", menuName = "Spells/Spell Config")]
     public class SpellConfig : ScriptableObject
     {
-        [field:SerializeField] public string SpellName { get; private set; }
-        [field:SerializeField] public string Description { get; private set; }
+        [field:SerializeField] public int SpellID { get; private set; }
+        [field:SerializeField] public SpellData SpellData { get; private set; }
         [field:SerializeField] public SpellStats SpellStats { get; private set; }
-        [field:SerializeField] public Sprite SpellIcon { get; private set; }
-        [field: SerializeField] public GameObject SpellVfx { get; private set;}
-        [field: SerializeField] public EffectData EffectData { get; private set; }
-        [field:SerializeField] public string AnimationName { get; private set; }
+        [field:SerializeField] public SpellEffectData SpellSpellEffect { get; private set; }
+        [field:SerializeField] public SpellVisualData SpellVisualData { get; private set; }
+        [field:SerializeField] public SpellAnimations SpellAnimations { get; private set; }
     }
 
     [Serializable]
-    public class SpellStats
+    public class SpellData
     {
         public SpellType spellType;
-        public SpellElement spellElement;
-        public SpellTarget spellTarget;
+        public string spellName;
+        public string description;
+    }
+
+    [Serializable]
+    public class SpellVisualData
+    {
+        public Sprite spellIcon;
+        public GameObject spellObject;
+    }
+
+    [Serializable]
+    public class SpellAnimations
+    {
+        public string startAnimation;
+        public string flyAnimation;
+        public string hitAnimation;
+    }
+    
+    [Serializable]
+    public class SpellStats
+    {
         public int spellDamage;
         public int spellCost;
         public float spellSpeed;
+    }
+
+    [Serializable]
+    public class SpellEffectData
+    {
+        public SpellElement spellElement;
+        public SpellTarget spellTarget;
+        public int effectTurns;
     }
     
     #region Enums

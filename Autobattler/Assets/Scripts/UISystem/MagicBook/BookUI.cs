@@ -55,8 +55,8 @@ namespace UISystem.MagicBook
             spellName.text = $"Spell name: {currentSpell.SpellName}";
             spellDescription.text = $"Description: {currentSpell.Description}";
             spellImage.sprite = currentSpell.SpellIcon;
-            spellType.text = $"Spell type: {currentSpell.SpellStats.spellType}";
-            spellDamage.text = $"Damage: {currentSpell.SpellStats.spellDamage}";
+            spellType.text = $"Spell type: {currentSpell.SpellData.spellType}";
+            spellDamage.text = $"Damage: {currentSpell.SpellData.spellDamage}";
         }
 
         private void Close()

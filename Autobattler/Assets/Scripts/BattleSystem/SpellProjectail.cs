@@ -14,25 +14,25 @@ namespace BattleSystem
         {
             spellAnimator.SetBool(spellConfig.AnimationName, true);
             
-            yield return StartCoroutine(Move(targetPosition, spellConfig.SpellStats.spellSpeed));
+            yield return StartCoroutine(Move(targetPosition, spellConfig.SpellData.spellSpeed));
             
             spellAnimator.SetBool(spellConfig.AnimationName, false);
             
-            if (spellConfig.SpellStats.spellType == SpellType.Damage)
+            if (spellConfig.SpellData.spellType == SpellType.Damage)
             {
-                StartCoroutine(unit.TakeHit(spellConfig.SpellStats.spellDamage));
+                StartCoroutine(unit.TakeHit(spellConfig.SpellData.spellDamage));
                 Destroy(gameObject);
                 yield break;
             }
             
-            if (spellConfig.SpellStats.spellType == SpellType.Heal)
+            if (spellConfig.SpellData.spellType == SpellType.Heal)
             {
-                unit.Heal(spellConfig.SpellStats.spellDamage);
+                unit.Heal(spellConfig.SpellData.spellDamage);
                 Destroy(gameObject);
                 yield break;
             }
 
-            if (spellConfig.SpellStats.spellType == SpellType.Effective)
+            if (spellConfig.SpellData.spellType == SpellType.Effective)
             {
                 unit.SetEffective(spellConfig.EffectData, spellConfig);
                 Destroy(gameObject);

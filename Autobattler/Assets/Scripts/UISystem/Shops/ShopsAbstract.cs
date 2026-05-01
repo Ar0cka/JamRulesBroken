@@ -1,96 +1,96 @@
+using System;
 using System.Collections.Generic;
 using DefaultNamespace.WorldSceneScripts.NpcDialogScript;
 using Player.PlayerProviders;
 using Player.StateController;
 using ScriptableObjects;
+using UISystem.ShopButton;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UISystem
 {
-    public abstract class ShopsAbstract<TShopConfig, TDictionaryKey, TShopProduct> : MonoBehaviour, IShop 
-        where TShopConfig : ScriptableObject 
+    public abstract class ShopsAbstract<TShopConfig, TShopProduct> : MonoBehaviour, IShop 
         where TShopProduct : ScriptableObject 
     {
         [Header("Data")]
-        [SerializeField] private TShopConfig shopConfig;
-        [SerializeField] private DialogController dialogWindow;
-        [SerializeField] private BuySystemAbstract buySystem;
+        [SerializeField] protected TShopConfig shopConfig;
+        [SerializeField] protected BuySystemAbstract buySystem;
         
         [Header("UI Components")]
-        [SerializeField] private GameObject currentObject;
-        [SerializeField] private Button exitButton;
+        [SerializeField] protected GameObject shopObject;
+        [SerializeField] protected Button exitButton;
         
-        [Header("Transforms")]
-        [SerializeField] private Transform cardParent;
-        
-        private readonly Dictionary<TDictionaryKey, TShopProduct> _shopConfigs = new();
-        private readonly List<BuyButton> _buttons = new();
+        /// <summary>
+        /// Using for lisent end buy
+        /// </summary>
+        protected Action<int, TShopProduct> OnBuyEnd;
+        protected readonly Dictionary<int, TShopProduct> ShopConfigs = new();
+        protected readonly List<BaseBuyButton<TShopProduct>> BuyButtons = new();
 
-        private IStateProvider _provider;
+        protected IStateProvider StateProvider;
 
-        private bool _isOpen;
+        protected bool IsOpen;
 
+        /// <summary>
+        /// Enter point for initialize UI panel.
+        /// Using InitializeShopCollection in the base realization.
+        /// </summary>
+        /// <param name="stateProvider"></param>
         public virtual void EnterToShop(IStateProvider stateProvider)
         {
-            if (_isOpen) return;
+            if (IsOpen) return;
 
-            _provider = stateProvider;
-
-            _provider.SwitchPlayerState(PlayerStates.IsDialogWindow, true);
+            StateProvider = stateProvider;
             
-            foreach (var unit in shopConfig.UnitConfigs)
-            {
-                _shopConfigs.TryAdd(unit.config.UnitName, unit);
-            }
-
-            foreach (var conf in _shopConfigs.Values)
-            {
-                var gamePrefab = Instantiate(imagePrefab, cardParent, false);
-                var buttonInitialize = gamePrefab.GetComponent<BuyButton>();
-                buttonInitialize.Initialize(conf, buyPanel);
-                _buttons.Add(buttonInitialize);
-            }
+            InitializeShopCollection();
             
             exitButton.onClick.AddListener(Exit);
-            panelObject.SetActive(true);
-            _isOpen = true;
+            OnBuyEnd = BuyEndBase;
+            
+            shopObject.SetActive(true);
+            SwitchState(true);
         }
 
-        public void BuyEnd(string unitName, UnitShopConfig changedConfig)
+        protected abstract void InitializeShopCollection();
+        
+        protected void BuyEndBase(int key, TShopProduct product)
         {
-            _shopConfigs[unitName] = changedConfig;
-
-            foreach (var button in _buttons)
+            ShopConfigs[key] = product;
+            
+            foreach (var button in BuyButtons)
             {
-                if (_shopConfigs.TryGetValue(button.CurrentUnit, out var value))
+                if (ShopConfigs.TryGetValue(button.CurrentProductID, out var value))
                 {
                     button.UpdateButtonData(value);
                 }
             }
         }
 
+        protected void SwitchState(bool isOpen)
+        {
+            IsOpen = isOpen;
+            StateProvider.SwitchPlayerState(PlayerStates.IsDialogWindow, isOpen);
+        }
+
         public void Exit()
         {
-            foreach (var button in _buttons)
+            foreach (var button in BuyButtons)
             {
-                button.Destroy();
+                button.Dispose();
             }
             
-            _buttons.Clear();
-            _shopConfigs.Clear();
+            BuyButtons.Clear();
+            ShopConfigs.Clear();
             
-            dialogWindow.CloseDialog();
-            panelObject.SetActive(false);
+            shopObject.SetActive(false);
 
-            _provider.SwitchPlayerState(PlayerStates.IsDialogWindow, false);
-
-            if (buyPanel.gameObject.activeInHierarchy)
+            if (buySystem.gameObject.activeInHierarchy)
             {
-                buyPanel.ClosePanel();
+                buySystem.ClosePanel();
             }
             
-            _isOpen = false;
+            SwitchState(false);
         }
     }
 }

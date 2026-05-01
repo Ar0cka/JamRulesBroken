@@ -6,8 +6,8 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "Unit", menuName = "Config/Unit", order = 0)]
     public class UnitConfigs : ScriptableObject
     {
+        [field: SerializeField] public int UnitID { get; private set; }
         [field: SerializeField] public string UnitName { get; private set; }
-        
         [field: SerializeField] public UnitMovement Movement { get; private set; }
         [field: SerializeField] public UnitStats Stats { get; private set; }
         [field: SerializeField] public UnitAnimation Animation { get; private set; }
