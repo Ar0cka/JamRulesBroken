@@ -1,11 +1,15 @@
+using Player;
 using ScriptableObjects;
 using UISystem.Shops;
 using UISystem.Shops.ShopsFactory;
+using UnityEngine;
 
 namespace UISystem.MagicLavka
 {
     public class MagicShopUI : ShopsAbstract<MagicShopConfig, SpellShopConfig>
     {
+        [SerializeField] private MagicShopBuySystem buySystem;
+        
         protected override void InitializeShopCollection()
         {
             var list = shopConfig.Clone();
@@ -19,7 +23,7 @@ namespace UISystem.MagicLavka
             {
                 var buttonInitialize =
                     BuyButtonFactory.CreateBuyButton(ShopCardType.MagicCard, conf, cardParent,
-                        buySystem);
+                        buySystem, PlayerContainer);
                 
                 BuyButtons.Add(buttonInitialize);
             }

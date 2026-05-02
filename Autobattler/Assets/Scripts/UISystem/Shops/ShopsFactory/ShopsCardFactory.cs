@@ -1,4 +1,5 @@
 using System;
+using Player.Containers;
 using ScriptableObjects;
 using UISystem.ShopButton;
 using UnityEngine;
@@ -17,7 +18,8 @@ namespace UISystem.Shops.ShopsFactory
             _tavernCardPrefab = tavernCardPrefab;
         }
         
-        public BaseBuyButton<TConfig> CreateBuyButton<TConfig>(ShopCardType cardType, TConfig config, Transform buyButtonParent, IBuySystem buySystem)
+        public BaseBuyButton<TConfig> CreateBuyButton<TConfig>(ShopCardType cardType, TConfig config, Transform buyButtonParent, 
+            BuySystemAbstract buySystem, IPlayerContainer playerContainer) where TConfig : class
         {
             var cardObject = SetNeededObject(cardType);
 
@@ -26,7 +28,7 @@ namespace UISystem.Shops.ShopsFactory
             
             var createdObject = Object.Instantiate(_magicCardPrefab, buyButtonParent, false);
             var baseBuyButton = createdObject.GetComponent<BaseBuyButton<TConfig>>();
-            baseBuyButton.Initialize(config, buySystem);
+            baseBuyButton.Initialize(config, playerContainer, buySystem);
             
             return baseBuyButton;
         }

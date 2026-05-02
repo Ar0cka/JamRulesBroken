@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Player.Containers;
 using Player.PlayerProviders;
 using Player.StateController;
 using UISystem.ShopButton;
+using UISystem.Shops.Interfaces;
 using UISystem.Shops.ShopsFactory;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,11 +15,12 @@ namespace UISystem.Shops
     
     /// <typeparam name="TShopConfig"></typeparam>
     /// <typeparam name="TShopProduct"></typeparam>
-    public abstract class ShopsAbstract<TShopConfig, TShopProduct> : MonoBehaviour, IShop where TShopConfig : ScriptableObject
+    public abstract class ShopsAbstract<TShopConfig, TShopProduct> : MonoBehaviour, IShop 
+        where TShopConfig : ScriptableObject
+        where TShopProduct : class
     {
         [Header("Data")]
         [SerializeField] protected TShopConfig shopConfig;
-        [SerializeField] protected BuySystemAbstract buySystem;
         
         [Header("UI Components")]
         [SerializeField] protected GameObject shopObject;
@@ -36,6 +39,7 @@ namespace UISystem.Shops
         protected readonly List<BaseBuyButton<TShopProduct>> BuyButtons = new();
 
         protected IStateProvider StateProvider;
+        protected IPlayerContainer PlayerContainer;
 
         protected bool IsOpen;
 
@@ -44,11 +48,13 @@ namespace UISystem.Shops
         /// Using InitializeShopCollection in the base realization.
         /// </summary>
         /// <param name="stateProvider"></param>
-        public virtual void EnterToShop(IStateProvider stateProvider)
+        /// <param name="playerContainer"></param>
+        public virtual void EnterToShop(IStateProvider stateProvider, IPlayerContainer playerContainer)
         {
             if (IsOpen) return;
 
             StateProvider = stateProvider;
+            PlayerContainer = playerContainer;
             
             InitializeShopCollection();
             
@@ -80,7 +86,7 @@ namespace UISystem.Shops
             StateProvider.SwitchPlayerState(PlayerStates.IsDialogWindow, isOpen);
         }
 
-        public void Exit()
+        protected virtual void Exit()
         {
             foreach (var button in BuyButtons)
             {
@@ -91,11 +97,6 @@ namespace UISystem.Shops
             ShopConfigs.Clear();
             
             shopObject.SetActive(false);
-
-            if (buySystem.gameObject.activeInHierarchy)
-            {
-                buySystem.CloseBuyMenu();
-            }
             
             SwitchState(false);
         }

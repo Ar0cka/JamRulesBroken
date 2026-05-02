@@ -6,7 +6,7 @@ namespace ShopSystem
     {
         [SerializeField] private Wallet playerMoney;
         
-        public bool PlayerBuyUnit(int price)
+        public bool PlayerBuy(int price)
         {
             if (playerMoney.CurrentMoney < price) return false;
 

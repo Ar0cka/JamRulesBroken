@@ -6,6 +6,7 @@ using Player.PlayerProviders;
 using Player.StateController;
 using ScriptableObjects;
 using TMPro;
+using UISystem.Shops.Interfaces;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;

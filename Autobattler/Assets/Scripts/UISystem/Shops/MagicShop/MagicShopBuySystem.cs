@@ -1,30 +1,20 @@
+using System;
 using Player;
 using ScriptableObjects;
 using ShopSystem;
 using TMPro;
 using UISystem.MagicLavka;
+using UISystem.Shops;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UISystem
 {
-    public class MagicBuyPanel : MonoBehaviour
+    public class MagicShopBuySystem : BuySystemAbstract
     {
-        [SerializeField] private Image image;
-        [SerializeField] private TextMeshProUGUI price;
-        [SerializeField] private Button buyButton;
         [SerializeField] private Button cancelButton;
         [SerializeField] private MagicShopUI magicShop;
-
-        [SerializeField] private TransitMoney transitMoney;
-        [SerializeField] private ErrorWindow errorWindow;
-
-        [SerializeField] private PlayerSpellContainer playerContainer;
         
-        private SpellShopConfig _config;
-        
-        private bool _isOpen = false;
-
         private void BuyItem()
         {
             if (playerContainer.ContainsSpell(_config.config.SpellName))
@@ -34,7 +24,7 @@ namespace UISystem
                 return;
             }
             
-            var isSuccesses = transitMoney.PlayerBuyUnit(_config.price);
+            var isSuccesses = transitMoney.PlayerBuy(_config.price);
             
             if (isSuccesses)
             {
@@ -49,21 +39,6 @@ namespace UISystem
             ClosePanel();
         }
 
-        public void OpenPanel(SpellShopConfig config)
-        {
-            if (_isOpen) return;
-            
-            _config = config;
-            
-            image.sprite = _config.config.SpellIcon;
-            price.text = $"Cost: {_config.price.ToString()}";
-            
-            buyButton.onClick.AddListener(BuyItem);
-            cancelButton.onClick.AddListener(ClosePanel);
-
-            _isOpen = true;
-        }
-
         public void ClosePanel()
         {
             magicShop.BuyEnd(_config.config.SpellName, _config);
@@ -71,8 +46,33 @@ namespace UISystem
             
             buyButton.onClick.RemoveListener(BuyItem);
             cancelButton.onClick.RemoveListener(ClosePanel);
+        }
+
+        public override void OpenBuyMenu<TConfig, TContainer>(TConfig config, 
+            TContainer playerContainer, Action<TConfig> onEndBuy)
+        {
+            if (IsOpen())
+                return;
+
+            var shopConfig = config as SpellShopConfig;
+
+            if (shopConfig is null)
+                throw new NullReferenceException(nameof(SpellShopConfig));
             
-            _isOpen = false;
+            
+            
+            base.OpenBuyMenu(config, playerContainer, onEndBuy);
+        }
+
+        protected override void BuyAction()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void UpdateUI()
+        {
+            image.sprite = _config.config.SpellIcon;
+            price.text = $"Cost: {_config.price.ToString()}";
         }
     }
 }

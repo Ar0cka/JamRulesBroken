@@ -33,7 +33,7 @@ namespace UISystem
         {
             int buyCount = (int) countSlider.value;
             var priceAll = _config.price * buyCount;
-            var isSuccesses = transitMoney.PlayerBuyUnit(priceAll);
+            var isSuccesses = transitMoney.PlayerBuy(priceAll);
             
             if (isSuccesses)
             {

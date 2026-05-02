@@ -1,10 +1,10 @@
+using Player.Containers;
 using Player.PlayerProviders;
-using UnityEditor.VersionControl;
 
-namespace UISystem
+namespace UISystem.Shops.Interfaces
 {
     public interface IShop
     {
-        void EnterToShop(IStateProvider stateProvider);
+        void EnterToShop(IStateProvider stateProvider, IPlayerContainer playerContainer);
     }
 }

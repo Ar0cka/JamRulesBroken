@@ -1,27 +1,33 @@
 using System;
+using Player.Containers;
 using ScriptableObjects;
+using UISystem.Shops;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UISystem.ShopButton
 {
     public abstract class BaseBuyButton<TConfig> : MonoBehaviour, IDisposable
+        where TConfig : class
     {
         [SerializeField] protected Button buyButton;
         
-        public int CurrentProductID { get; private set; }
-        
-        protected IBuySystem BuySystem { get; private set; }
         protected TConfig Config { get; private set; }
+        protected BuySystemAbstract BuySystem { get; private set; }
+        
+        public int CurrentProductID { get; private set; }
 
-        public virtual void Initialize(TConfig conf, IBuySystem buySystem)
+        public virtual void Initialize(TConfig conf, IPlayerContainer playerContainer, BuySystemAbstract buySystem)
         {
             BuySystem = buySystem;
             Config = conf;
             
             UpdateUI();
             
-            buyButton.onClick.AddListener(buySystem.OpenBuyMenu);
+            buyButton.onClick.AddListener(() =>
+            {
+                BuySystem.OpenBuyMenu(conf, playerContainer);
+            });
         }
 
         protected abstract void UpdateUI();

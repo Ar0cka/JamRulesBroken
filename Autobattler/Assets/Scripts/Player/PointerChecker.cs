@@ -1,5 +1,6 @@
 using System;
 using UISystem;
+using UISystem.Shops.Interfaces;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
