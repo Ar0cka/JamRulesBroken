@@ -1,19 +1,21 @@
 using System;
 using System.Collections.Generic;
+using ScriptableObjects.SpellConfigs;
+using ScriptableObjects.UnitConfigs;
 using UnityEngine;
 
 namespace ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "TaverConfig", menuName = "Config/Tavern", order = 0)]
+    [CreateAssetMenu(fileName = "TavernConfig", menuName = "Config/Tavern", order = 0)]
     public class ShopConfig : ScriptableObject
     {
-        [field:SerializeField] public List<UnitShopConfig> UnitConfigs { get; private set; }
+        [field:SerializeField] private List<UnitShopConfig> unitConfigs;
 
         public List<UnitShopConfig> CloneConfigs()
         {
             var newList = new List<UnitShopConfig>();
         
-            foreach (var unitConfig in UnitConfigs)
+            foreach (var unitConfig in unitConfigs)
             {
                 newList.Add(unitConfig.Clone()); // Вызываем Clone() каждого элемента
             }
@@ -21,27 +23,11 @@ namespace ScriptableObjects
             return newList;
         }
     }
-
-    [Serializable]
-    public class SpellShopConfig
-    {
-        public SpellConfig config;
-        public int price;
-        
-        public SpellShopConfig Clone()
-        {
-            return new SpellShopConfig()
-            {
-                config = config,
-                price = price,
-            };
-        }
-    }
     
     [Serializable]
     public class UnitShopConfig
     {
-        public UnitConfigs config;
+        public UnitConfig config;
         public int price;
         public int count;
 

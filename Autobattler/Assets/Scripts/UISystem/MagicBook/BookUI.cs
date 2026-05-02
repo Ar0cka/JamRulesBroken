@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Player;
 using ScriptableObjects;
+using ScriptableObjects.SpellConfigs;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

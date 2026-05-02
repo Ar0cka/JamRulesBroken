@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ScriptableObjects.UnitConfigs;
 using UnityEngine;
 
 namespace ScriptableObjects.WorldSceneConfigs
@@ -29,7 +30,7 @@ namespace ScriptableObjects.WorldSceneConfigs
     [Serializable]
     public class EnemyBattle
     {
-        public UnitConfigs units;
+        public UnitConfig units;
         public int count;
     }
 }

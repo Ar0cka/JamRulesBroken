@@ -7,6 +7,7 @@ using BattleSystem.UnitSystem.data;
 using DefaultNamespace.Pathfiender;
 using Grid;
 using ScriptableObjects;
+using ScriptableObjects.UnitConfigs;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -202,7 +203,7 @@ namespace BattleSystem
             }
         }
         
-        private void CreateUnit(ObjectParent parent, UnitData unit)
+        private void CreateUnit(ObjectParent parent, UnitBattleStates unit)
         {
             var spawnPoint = parent == ObjectParent.Player ? gridSystem.GetRandomPlayerCell() : gridSystem.GetRandomEnemyCell();
                 

@@ -2,9 +2,16 @@ using UnityEngine;
 
 namespace UISystem
 {
-    public class BuySystemAbstract : MonoBehaviour
+    public class BuySystemAbstract<TContainer, TConfig> : MonoBehaviour, IBuySystem
     {
-        public void ClosePanel()
+        protected TConfig config;
+        
+        public void OpenBuyMenu()
+        {
+            
+        }
+
+        public void CloseBuyMenu()
         {
             
         }

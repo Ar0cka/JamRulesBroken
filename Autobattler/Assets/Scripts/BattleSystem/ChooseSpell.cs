@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ScriptableObjects;
+using ScriptableObjects.SpellConfigs;
 using TMPro;
 using UISystem;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace BattleSystem
         [SerializeField] private GameObject spellCardPrefab;
         [SerializeField] private Transform spellParent;
 
-        [SerializeField] private ErrorMessage errorMessage;
+        [SerializeField] private ErrorWindow errorWindow;
 
         [SerializeField] private PlayerCastSystem playerCastSystem;
         [SerializeField] private TurnController turnController;
@@ -37,7 +38,7 @@ namespace BattleSystem
             {
                 if (!playerCastSystem.IsCanCast)
                 {
-                    errorMessage.OpenPanel( ErrorType.SpellType,"Failed to cast spell. You dont have spell action");
+                    errorWindow.OpenPanel( ErrorType.SpellType,"Failed to cast spell. You dont have spell action");
                     return;
                 }
                 

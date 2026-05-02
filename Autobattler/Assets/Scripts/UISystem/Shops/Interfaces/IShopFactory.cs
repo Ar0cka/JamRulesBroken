@@ -1,7 +1,7 @@
 namespace UISystem
 {
-    public interface IShopFactory
+    public interface IShopFactory<TFactoryType>
     {
-        
+        public TFactoryType Create<TData>(TData createData);
     }
 }

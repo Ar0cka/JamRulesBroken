@@ -1,9 +1,7 @@
 using System;
-using BattleSystem.UnitSystem.data;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace ScriptableObjects
+namespace ScriptableObjects.SpellConfigs
 {
     [CreateAssetMenu(fileName = "New Spell", menuName = "Spells/Spell Config")]
     public class SpellConfig : ScriptableObject

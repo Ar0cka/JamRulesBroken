@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ScriptableObjects.SpellConfigs;
 using UnityEngine;
 
 namespace ScriptableObjects

@@ -1,13 +1,14 @@
 using System;
 using ScriptableObjects;
+using ScriptableObjects.UnitConfigs;
 using UnityEngine;
 
 namespace BattleSystem.UnitSystem.data
 {
     [Serializable]
-    public class UnitData
+    public class UnitBattleStates
     {
-        public UnitData(UnitConfigs unitConfig, int count)
+        public UnitBattleStates(UnitConfig unitConfig, int count)
         {
             UnitConfig = unitConfig;
             Count = count;
@@ -22,7 +23,7 @@ namespace BattleSystem.UnitSystem.data
         public int X { get; private set; } = -1;
         public int Y { get; private set; } = -1;
         
-        [field:SerializeField] public UnitConfigs UnitConfig { get; private set; }
+        [field:SerializeField] public UnitConfig UnitConfig { get; private set; }
         [field:SerializeField] public int Count { get; private set; }
         
         public void SetPosition(int x, int y, Vector2 worldPosition)

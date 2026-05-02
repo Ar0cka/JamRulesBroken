@@ -1,22 +1,34 @@
 using System;
 using UnityEngine;
 
-namespace ScriptableObjects
+namespace ScriptableObjects.UnitConfigs
 {
     [CreateAssetMenu(fileName = "Unit", menuName = "Config/Unit", order = 0)]
-    public class UnitConfigs : ScriptableObject
+    public class UnitConfig : ScriptableObject
     {
         [field: SerializeField] public int UnitID { get; private set; }
-        [field: SerializeField] public string UnitName { get; private set; }
+        [field: SerializeField] public UnitData UnitData { get; private set; }
         [field: SerializeField] public UnitMovement Movement { get; private set; }
         [field: SerializeField] public UnitStats Stats { get; private set; }
         [field: SerializeField] public UnitAnimation Animation { get; private set; }
+        [field: SerializeField] public UnitVisualData VisualData { get; private set; }
         
-        [field:SerializeField] public GameObject UnitModel { get; private set; }
-        [field:SerializeField] public UnitType Type { get; private set; }
-        [field:SerializeField] public Sprite UnitSprite { get; private set; }
     }
 
+    [Serializable]
+    public class UnitData
+    {
+        public string unitName;
+        public UnitType unitType;
+    }
+
+    [Serializable]
+    public class UnitVisualData
+    {
+        public Sprite unitSprite;
+        public GameObject unitModel;
+    }
+    
     [Serializable]
     public class UnitMovement
     {
@@ -30,7 +42,7 @@ namespace ScriptableObjects
         public int health;
         public int attack;
         public int defense;
-        public int maxCellsInTurn;
+        public int cellsInTurn;
         public int initiative;
     }
 

@@ -2,6 +2,7 @@ using Player;
 using ScriptableObjects;
 using ShopSystem;
 using TMPro;
+using UISystem.MagicLavka;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,10 +14,10 @@ namespace UISystem
         [SerializeField] private TextMeshProUGUI price;
         [SerializeField] private Button buyButton;
         [SerializeField] private Button cancelButton;
-        [SerializeField] private MagicLavkaUI magicLavka;
+        [SerializeField] private MagicShopUI magicShop;
 
         [SerializeField] private TransitMoney transitMoney;
-        [SerializeField] private ErrorMessage errorMessage;
+        [SerializeField] private ErrorWindow errorWindow;
 
         [SerializeField] private PlayerSpellContainer playerContainer;
         
@@ -28,7 +29,7 @@ namespace UISystem
         {
             if (playerContainer.ContainsSpell(_config.config.SpellName))
             {
-                errorMessage.OpenPanel(ErrorType.SpellType);
+                errorWindow.OpenPanel(ErrorType.SpellType);
                 
                 return;
             }
@@ -41,7 +42,7 @@ namespace UISystem
             }
             else
             {
-                errorMessage.OpenPanel(ErrorType.MoneyType);
+                errorWindow.OpenPanel(ErrorType.MoneyType);
                 return;
             }
             
@@ -65,7 +66,7 @@ namespace UISystem
 
         public void ClosePanel()
         {
-            magicLavka.BuyEnd(_config.config.SpellName, _config);
+            magicShop.BuyEnd(_config.config.SpellName, _config);
             gameObject.SetActive(false);
             
             buyButton.onClick.RemoveListener(BuyItem);

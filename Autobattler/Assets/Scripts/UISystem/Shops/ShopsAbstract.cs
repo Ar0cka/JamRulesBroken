@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Generic;
-using DefaultNamespace.WorldSceneScripts.NpcDialogScript;
 using Player.PlayerProviders;
 using Player.StateController;
-using ScriptableObjects;
 using UISystem.ShopButton;
+using UISystem.Shops.ShopsFactory;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
-namespace UISystem
+namespace UISystem.Shops
 {
-    public abstract class ShopsAbstract<TShopConfig, TShopProduct> : MonoBehaviour, IShop 
-        where TShopProduct : ScriptableObject 
+    
+    /// <typeparam name="TShopConfig"></typeparam>
+    /// <typeparam name="TShopProduct"></typeparam>
+    public abstract class ShopsAbstract<TShopConfig, TShopProduct> : MonoBehaviour, IShop where TShopConfig : ScriptableObject
     {
         [Header("Data")]
         [SerializeField] protected TShopConfig shopConfig;
@@ -20,6 +22,11 @@ namespace UISystem
         [Header("UI Components")]
         [SerializeField] protected GameObject shopObject;
         [SerializeField] protected Button exitButton;
+
+        [Header("Card Position")] 
+        [SerializeField] protected Transform cardParent;
+        
+        [Inject] protected ShopsCardFactory BuyButtonFactory;
         
         /// <summary>
         /// Using for lisent end buy
@@ -87,7 +94,7 @@ namespace UISystem
 
             if (buySystem.gameObject.activeInHierarchy)
             {
-                buySystem.ClosePanel();
+                buySystem.CloseBuyMenu();
             }
             
             SwitchState(false);

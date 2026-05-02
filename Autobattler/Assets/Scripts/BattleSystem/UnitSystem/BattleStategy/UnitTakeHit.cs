@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BattleSystem.UnitSystem.data;
 using ScriptableObjects;
+using ScriptableObjects.UnitConfigs;
 using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
@@ -27,16 +28,16 @@ namespace BattleSystem.BattleStategy
         private int _count;
         private int Count { get => _count; set { _count = value; UpdateHitPointText(); } }
         
-        private UnitData _unitData;
+        private UnitBattleStates _unitBattleStates;
 
-        public void InitializeUnitHitPoints(UnitData unitData, ObjectParent objectParent)
+        public void InitializeUnitHitPoints(UnitBattleStates unitBattleStates, ObjectParent objectParent)
         {
             if (objectParent == ObjectParent.Enemy)
                 countBac.color = Color.red;
             
-            Count = unitData.Count;
-            var unitConfig = unitData.UnitConfig;
-            _unitData = unitData;
+            Count = unitBattleStates.Count;
+            var unitConfig = unitBattleStates.UnitConfig;
+            _unitBattleStates = unitBattleStates;
             
             _currentHitPoints = unitConfig.Stats.health * Count;
             _oneCountHitPoints = unitConfig.Stats.health;
@@ -48,7 +49,7 @@ namespace BattleSystem.BattleStategy
             //hitPointText.transform.Rotate(0, 180, 0);
         }
 
-        public IEnumerator TakeHit(UnitConfigs unitConfig, Action unitDeadAction, int damage)
+        public IEnumerator TakeHit(UnitConfig unitConfig, Action unitDeadAction, int damage)
         {
             int finallyDamage = damage;
             
@@ -56,7 +57,7 @@ namespace BattleSystem.BattleStategy
             
             Count = Mathf.CeilToInt((float)_currentHitPoints / _oneCountHitPoints);
 
-            _unitData.SetNewCount(Count);
+            _unitBattleStates.SetNewCount(Count);
             
             if (Count <= 0)
             {
@@ -77,7 +78,7 @@ namespace BattleSystem.BattleStategy
 
             Count = _currentHitPoints <= _oneCountHitPoints ? 1 : Mathf.RoundToInt((float)_currentHitPoints / _oneCountHitPoints);
             
-            _unitData.SetNewCount(Count);
+            _unitBattleStates.SetNewCount(Count);
             
             UpdateHitPointText();
         }

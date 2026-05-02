@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ScriptableObjects.UnitConfigs;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -29,7 +30,7 @@ namespace ScriptableObjects
     [Serializable]
     public class PlayerUnit
     {
-        public UnitConfigs unitConfig;
+        public UnitConfig unitConfig;
         public int unitCount;
     }
 }

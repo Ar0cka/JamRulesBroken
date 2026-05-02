@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ScriptableObjects;
+using ScriptableObjects.SpellConfigs;
 using TMPro;
 using UISystem;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace BattleSystem
         [SerializeField] private Camera mainCamera;
         [SerializeField] private Transform spellPosition;
         [SerializeField] private TextMeshProUGUI spellNameBox;
-        [SerializeField] private ErrorMessage errorMessage;
+        [SerializeField] private ErrorWindow errorWindow;
         [SerializeField] private TurnController turnController;
         private Dictionary<string, SpellConfig> _playerSpellList = new();
 
@@ -41,7 +42,7 @@ namespace BattleSystem
                 
                 if (unit.collider == null)
                 {
-                    errorMessage.OpenPanel(ErrorType.SpellType, "You put not unit target");
+                    errorWindow.OpenPanel(ErrorType.SpellType, "You put not unit target");
                     UnsetCastInBeginTurn();
                     return;
                 }
@@ -54,7 +55,7 @@ namespace BattleSystem
                 }
                 else
                 {
-                    errorMessage.OpenPanel(ErrorType.SpellType, "You put not unit target");
+                    errorWindow.OpenPanel(ErrorType.SpellType, "You put not unit target");
                     UnsetCastInBeginTurn();
                 }
             } 

@@ -1,15 +1,15 @@
 using System;
 using Player;
+using Player.PlayerProviders;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UISystem
 {
-    public class ErrorMessage : MonoBehaviour
+    public class ErrorWindow : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI meshPro;
-        [SerializeField] private PlayerStateController stateController;
         [SerializeField] private Button exitButton;
         
         private const string MoneyError = "Not enough money";
@@ -26,18 +26,12 @@ namespace UISystem
                 meshPro.text = message;
             else 
                 meshPro.text = type == ErrorType.MoneyType ? MoneyError : SpellError;
-
-            if (stateController is not null) 
-                stateController.IsDialogWindow = true;
             
             gameObject.SetActive(true);
         }
         
         private void ClosePanel()
         {
-            if (stateController is not null) 
-                stateController.IsDialogWindow = false;
-            
             gameObject.SetActive(false);
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using ScriptableObjects;
+using ScriptableObjects.SpellConfigs;
 using UnityEngine;
 
 namespace BattleSystem

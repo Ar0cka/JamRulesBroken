@@ -11,12 +11,12 @@ namespace BattleSystem.BattleStategy
         [SerializeField] private Transform spawnPoint;
 
 
-        public override IEnumerator Attack(UnitController targetUnit, UnitData unitData)
+        public override IEnumerator Attack(UnitController targetUnit, UnitBattleStates unitBattleStates)
         {
             Vector2 targetVector = targetUnit.transform.position;
             SetSpriteSide(targetVector);
             
-            var unitConfig = unitData.UnitConfig;
+            var unitConfig = unitBattleStates.UnitConfig;
             
             animator.SetTrigger(unitConfig.Animation.attack);
             yield return new WaitForSeconds(animationTime);
@@ -25,7 +25,7 @@ namespace BattleSystem.BattleStategy
             yield return StartCoroutine(arrow.GetComponent<RangeProjectileSettings>()
                 .LaunchProjectileAndWait(targetVector));
             
-            yield return StartCoroutine(targetUnit.TakeHit(unitConfig.Stats.attack * unitData.Count));
+            yield return StartCoroutine(targetUnit.TakeHit(unitConfig.Stats.attack * unitBattleStates.Count));
         }
     }
 }

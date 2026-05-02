@@ -11,7 +11,7 @@ namespace DefaultNamespace.Door
     public class DoorInter : MonoBehaviour
     {
         [SerializeField] private EventPanelSettings eventPanel;
-        [SerializeField] private ErrorMessage errorMessage;
+        [SerializeField] private ErrorWindow errorWindow;
         [SerializeField] private QuestController questController;
         [SerializeField] private PlayerInventory playerInventory;
         [SerializeField] private TilemapCollider2D tilemapCollider2D;
@@ -47,7 +47,7 @@ namespace DefaultNamespace.Door
                     }
                     
                     if (_isQuestCompleted)
-                        errorMessage.OpenPanel(ErrorType.MoneyType, questCompleteText);
+                        errorWindow.OpenPanel(ErrorType.MoneyType, questCompleteText);
                 }
                 finally
                 {
@@ -62,7 +62,7 @@ namespace DefaultNamespace.Door
             compositeCollider2D.enabled = false;
             questController.CompleteQuest(questData.neededItems.ItemName);
             StartCoroutine(bossScene.SpawnBossScene());
-            errorMessage.OpenPanel(ErrorType.MoneyType, questCompleteText);
+            errorWindow.OpenPanel(ErrorType.MoneyType, questCompleteText);
         }
 
         private void QuestNonTake()
@@ -85,7 +85,7 @@ namespace DefaultNamespace.Door
 
             notNeededItemText = $"Find all keys: {amount}/{questData.neededAmount}";
             
-            errorMessage.OpenPanel(ErrorType.MoneyType, notNeededItemText);
+            errorWindow.OpenPanel(ErrorType.MoneyType, notNeededItemText);
         }
 
         private bool CheckItemInInventory()

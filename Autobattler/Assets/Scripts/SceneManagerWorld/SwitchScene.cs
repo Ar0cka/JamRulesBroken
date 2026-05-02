@@ -90,21 +90,21 @@ namespace SceneManagerWorld
         {
             var playerUnits = playerUnitContainer.PlayerUnits.Values.ToList();
 
-            List<UnitData> unitData = new();
+            List<UnitBattleStates> unitData = new();
 
             grid.transform.position = savePos;
             foreach (var playerUnit in playerUnits)
             {
-                unitData.Add(new UnitData(playerUnit.unitConfig, playerUnit.unitCount));
+                unitData.Add(new UnitBattleStates(playerUnit.unitConfig, playerUnit.unitCount));
             }
 
             var playerSpells = playerSpellContainer.SpellDictionary.Values.ToList();
 
-            List<UnitData> unitDataEnemy = new();
+            List<UnitBattleStates> unitDataEnemy = new();
 
             foreach (var enemyUnit in _enemyConfig.EnemyBattle)
             {
-                unitDataEnemy.Add(new UnitData(enemyUnit.units, enemyUnit.count));
+                unitDataEnemy.Add(new UnitBattleStates(enemyUnit.units, enemyUnit.count));
             }
 
             return new SendToBattleData(unitData, unitDataEnemy, playerSpells);

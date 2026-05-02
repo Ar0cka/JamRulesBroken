@@ -69,7 +69,7 @@ namespace Player
                 _playerUnits[deletedUnitName] = null;
         }
 
-        public void RebuildUnitsAfterFight(List<UnitData> unitData)
+        public void RebuildUnitsAfterFight(List<UnitBattleStates> unitData)
         {
             _playerUnits.Clear();
 

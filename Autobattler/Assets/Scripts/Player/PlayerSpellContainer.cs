@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ScriptableObjects;
+using ScriptableObjects.SpellConfigs;
 using UnityEngine;
 
 namespace Player

@@ -1,5 +1,6 @@
 using System;
 using ScriptableObjects;
+using ScriptableObjects.SpellConfigs;
 
 namespace BattleSystem.UnitSystem.data
 {

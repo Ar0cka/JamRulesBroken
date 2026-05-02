@@ -6,6 +6,7 @@ using BattleSystem.BattleStategy;
 using BattleSystem.UnitSystem.data;
 using Grid;
 using ScriptableObjects;
+using ScriptableObjects.SpellConfigs;
 using UnityEngine;
 
 namespace BattleSystem
@@ -21,7 +22,7 @@ namespace BattleSystem
         [SerializeField] private float overlapRadius = 1;
         [SerializeField] private float overlapRadiusArea = 1.5f;
         [SerializeField] private float distance = 2f;
-        private UnitData _data;
+        private UnitBattleStates _battleStates;
         
         [HideInInspector] public ObjectParent objectParent;
 
@@ -30,38 +31,38 @@ namespace BattleSystem
         private GridSystem _gridSystem;
 
         public int ActionPoints { get; private set; }
-        public string UnitName => _data.UnitConfig.UnitName;
+        public string UnitName => _battleStates.UnitConfig.UnitName;
         
-        public void InitializeUnit(UnitData data, ObjectParent parent, Func<string, ObjectParent, bool> deadFunc, GridSystem gridSystem)
+        public void InitializeUnit(UnitBattleStates battleStates, ObjectParent parent, Func<string, ObjectParent, bool> deadFunc, GridSystem gridSystem)
         {
-            _data = data;
+            _battleStates = battleStates;
             _deadFunc = deadFunc;
             objectParent = parent;
             _gridSystem = gridSystem;
           
             
             _deadAction = UnitIsDead;
-            unitTakeHit.InitializeUnitHitPoints(data, parent);
+            unitTakeHit.InitializeUnitHitPoints(battleStates, parent);
         }
         
-        public UnitData GetData() => _data;
+        public UnitBattleStates GetData() => _battleStates;
         public void SetUnitPosition(int x, int y, Vector2 worldPos)
         {
-            if (_data.X != -1 && _data.Y != -1) 
-                _gridSystem.SetWalkable(_data.X, _data.Y, true);
+            if (_battleStates.X != -1 && _battleStates.Y != -1) 
+                _gridSystem.SetWalkable(_battleStates.X, _battleStates.Y, true);
             
-            _data.SetPosition(x, y, worldPos);
+            _battleStates.SetPosition(x, y, worldPos);
             _gridSystem.SetWalkable(x, y, false);
         }
 
         public IEnumerator UnitTurnActions(List<GridData> targetPath)
         {
-            ActionPoints = _data.UnitConfig.Stats.maxCellsInTurn;
+            ActionPoints = _battleStates.UnitConfig.Stats.cellsInTurn;
 
-            if (_data.CurrentEffectData.TurnsLess > 0 || _data.CurrentEffectData.EffectType == EffectType.None)
+            if (_battleStates.CurrentEffectData.TurnsLess > 0 || _battleStates.CurrentEffectData.EffectType == EffectType.None)
             {
                 yield return StartCoroutine(ChooseEffectiveAction());
-                _data.CurrentEffectData.EffectTurnPassed();
+                _battleStates.CurrentEffectData.EffectTurnPassed();
             }
             
             foreach (var path in targetPath)
@@ -102,19 +103,19 @@ namespace BattleSystem
         public IEnumerator Move(Vector2 targetPosition)
         {
             ActionPoints--;
-            yield return StartCoroutine(unitMove.Move(targetPosition, _data.UnitConfig.Movement.speed,
-                _data.UnitConfig.Animation.walk));
+            yield return StartCoroutine(unitMove.Move(targetPosition, _battleStates.UnitConfig.Movement.speed,
+                _battleStates.UnitConfig.Animation.walk));
         }
         
         public IEnumerator Attack(UnitController targetController)
         {
             ActionPoints = 0;
-            yield return StartCoroutine(unitAttack.Attack(targetController, _data));
+            yield return StartCoroutine(unitAttack.Attack(targetController, _battleStates));
         }
         
         public IEnumerator TakeHit(int damage)
         {
-            yield return StartCoroutine(unitTakeHit.TakeHit(_data.UnitConfig, _deadAction, damage));
+            yield return StartCoroutine(unitTakeHit.TakeHit(_battleStates.UnitConfig, _deadAction, damage));
         }
 
         public void Heal(int healCount)
@@ -124,37 +125,37 @@ namespace BattleSystem
 
         public void SetEffective(EffectData effectData, SpellConfig spellConfig)
         {
-            if (_data.CurrentEffectData == null)
-                _data.SetNewEffectData();
+            if (_battleStates.CurrentEffectData == null)
+                _battleStates.SetNewEffectData();
 
-            if (_data.CurrentEffectData != null)
-                _data.CurrentEffectData.SetNewEffect(effectData.EffectType, effectData.Turns, spellConfig);
+            if (_battleStates.CurrentEffectData != null)
+                _battleStates.CurrentEffectData.SetNewEffect(effectData.EffectType, effectData.Turns, spellConfig);
         }
 
         private IEnumerator ChooseEffectiveAction()
         {
-            if (_data.CurrentEffectData.EffectType == EffectType.Cold)
+            if (_battleStates.CurrentEffectData.EffectType == EffectType.Cold)
             {
                 ActionPoints--;
                 yield break;
             }
 
-            if (_data.CurrentEffectData.EffectType == EffectType.Speed)
+            if (_battleStates.CurrentEffectData.EffectType == EffectType.Speed)
             {
                 ActionPoints++;
                 yield break;
             }
 
-            if (_data.CurrentEffectData.EffectType == EffectType.Fire)
+            if (_battleStates.CurrentEffectData.EffectType == EffectType.Fire)
             {
-                yield return StartCoroutine(unitTakeHit.TakeHit(_data.UnitConfig, _deadAction,
-                    _data.CurrentEffectData.CurrentSpellData.SpellData.spellDamage));
+                yield return StartCoroutine(unitTakeHit.TakeHit(_battleStates.UnitConfig, _deadAction,
+                    _battleStates.CurrentEffectData.CurrentSpellData.SpellData.spellDamage));
             }
         }
         
         private void UnitIsDead()
         {
-            var delted = _deadFunc.Invoke(_data.UnitConfig.UnitName, objectParent);
+            var delted = _deadFunc.Invoke(_battleStates.UnitConfig.UnitName, objectParent);
             
             if (delted)
                 Destroy(gameObject);
