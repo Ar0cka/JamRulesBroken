@@ -1,32 +1,37 @@
 using System.Collections.Generic;
+using Player.Containers;
 using ScriptableObjects;
 using ScriptableObjects.SpellConfigs;
 using UnityEngine;
 
 namespace Player
 {
-    public class PlayerSpellContainer : MonoBehaviour
+    public class PlayerSpellContainer : MonoBehaviour, IPlayerContainer
     {
         [SerializeField] PlayerSpellCollection spellContainer;
         
-        private Dictionary<string, SpellConfig> _spellDictionary = new();
-        public IReadOnlyDictionary<string, SpellConfig> SpellDictionary => _spellDictionary;
+        private Dictionary<int, SpellConfig> _spellDictionary = new();
+        public IReadOnlyDictionary<int, SpellConfig> SpellDictionary => _spellDictionary;
         
         private void Awake()
         {
             foreach (var spell in spellContainer.PlayerStartSpells)
             {
-                _spellDictionary.Add(spell.SpellName, spell);
+                _spellDictionary.Add(spell.SpellID, spell);
             }
         }
         
         public void AddSpellToContainer(SpellConfig spellConfig)
         {
-            if (!_spellDictionary.TryAdd(spellConfig.SpellName, spellConfig)) return;
+            if (!_spellDictionary.TryAdd(spellConfig.SpellID, spellConfig)) return;
 
-            _spellDictionary[spellConfig.SpellName] = spellConfig;
+            _spellDictionary[spellConfig.SpellID] = spellConfig;
         }
         
-        public bool ContainsSpell(string spellName) => _spellDictionary.ContainsKey(spellName);
+        public bool ContainsSpell(int spellId) => _spellDictionary.ContainsKey(spellId);
+        public List<TContainer> GetContainer<TContainer>()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

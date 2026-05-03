@@ -6,14 +6,16 @@ using Player.PlayerProviders;
 using Player.StateController;
 using ScriptableObjects;
 using TMPro;
+using UISystem.Shops;
 using UISystem.Shops.Interfaces;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UISystem
 {
-    public class TavernUI : MonoBehaviour, IShop
+    public class TavernUI : ShopsAbstract<ShopConfig, UnitShopConfig>, IShop
     {
         [SerializeField] private GameObject panelObject;
         [SerializeField] private GameObject imagePrefab;
@@ -21,8 +23,8 @@ namespace UISystem
         [SerializeField] private ShopConfig shopConfig;
         [SerializeField] private Transform imageParent;
         [SerializeField] private DialogController dialogWindow;
-        [SerializeField] private BuyPanelSystem buyPanel;
-        private readonly Dictionary<string, UnitShopConfig> _shopConfigs = new();
+        [SerializeField] private TavernBuySystem tavernBuy;
+        private readonly Dictionary<int, UnitShopConfig> _shopConfigs = new();
         private readonly List<BuyButton> _buttons = new();
 
         private IStateProvider _provider;
@@ -37,6 +39,11 @@ namespace UISystem
 
             _provider.SwitchPlayerState(PlayerStates.IsDialogWindow, true);
             
+            tavernBuy.InitializeListener((i, o) =>
+            {
+                BuyEnd(i, (UnitShopConfig)o);
+            });
+            
             foreach (var unit in shopConfig.UnitConfigs)
             {
                 _shopConfigs.TryAdd(unit.config.UnitName, unit);
@@ -46,7 +53,7 @@ namespace UISystem
             {
                 var gamePrefab = Instantiate(imagePrefab, imageParent, false);
                 var buttonInitialize = gamePrefab.GetComponent<BuyButton>();
-                buttonInitialize.Initialize(conf, buyPanel);
+                buttonInitialize.Initialize(conf, tavernBuy);
                 _buttons.Add(buttonInitialize);
             }
             
@@ -55,13 +62,13 @@ namespace UISystem
             _isOpen = true;
         }
 
-        public void BuyEnd(string unitName, UnitShopConfig changedConfig)
+        public void BuyEnd(int unitId, UnitShopConfig changedConfig)
         {
-            _shopConfigs[unitName] = changedConfig;
+            _shopConfigs[unitId] = changedConfig;
 
             foreach (var button in _buttons)
             {
-                if (_shopConfigs.TryGetValue(button.CurrentUnit, out var value))
+                if (_shopConfigs.TryGetValue(button.CurrentProductID, out var value))
                 {
                     button.UpdateButtonData(value);
                 }
@@ -83,9 +90,9 @@ namespace UISystem
 
             _provider.SwitchPlayerState(PlayerStates.IsDialogWindow, false);
 
-            if (buyPanel.gameObject.activeInHierarchy)
+            if (tavernBuy.gameObject.activeInHierarchy)
             {
-                buyPanel.ClosePanel();
+                tavernBuy.ClosePanel();
             }
             
             _isOpen = false;

@@ -34,7 +34,6 @@ namespace UISystem.Shops
         /// <summary>
         /// Using for lisent end buy
         /// </summary>
-        protected Action<int, TShopProduct> OnBuyEnd;
         protected readonly Dictionary<int, TShopProduct> ShopConfigs = new();
         protected readonly List<BaseBuyButton<TShopProduct>> BuyButtons = new();
 
@@ -59,7 +58,7 @@ namespace UISystem.Shops
             InitializeShopCollection();
             
             exitButton.onClick.AddListener(Exit);
-            OnBuyEnd = BuyEndBase;
+            
             
             shopObject.SetActive(true);
             SwitchState(true);

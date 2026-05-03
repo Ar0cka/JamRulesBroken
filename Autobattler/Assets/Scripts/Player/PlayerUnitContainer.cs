@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BattleSystem.UnitSystem.data;
+using Player.Containers;
 using ScriptableObjects;
 using TMPro;
 using UISystem;
@@ -10,7 +11,7 @@ using UnityEngine.UI;
 
 namespace Player
 {
-    public class PlayerUnitContainer : MonoBehaviour
+    public class PlayerUnitContainer : MonoBehaviour, IPlayerContainer
     {
         [SerializeField] private PlayerUnitCollection startUnits;
         [SerializeField] private List<HydeUnits> unitsImage;

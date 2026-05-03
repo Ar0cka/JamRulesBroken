@@ -1,6 +1,7 @@
 using Player;
 using ScriptableObjects;
 using UISystem.Shops;
+using UISystem.Shops.MagicShop;
 using UISystem.Shops.ShopsFactory;
 using UnityEngine;
 
@@ -13,6 +14,11 @@ namespace UISystem.MagicLavka
         protected override void InitializeShopCollection()
         {
             var list = shopConfig.Clone();
+            
+            buySystem.InitializeListener((i, o) =>
+            {
+                BuyEndBase(i, (SpellShopConfig)o);
+            });
             
             foreach (var config in list)
             {

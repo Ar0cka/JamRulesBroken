@@ -23,6 +23,7 @@ namespace UISystem.Shops
         
         protected bool IsOpen() => gameObject.activeSelf;
 
+        public abstract void InitializeListener(Action<int, object> onEndFunc);
         /// <summary>
         /// In base realized buy and cancel button listeners and UpdateUI
         /// Buy button -> BuyAction()
@@ -30,26 +31,25 @@ namespace UISystem.Shops
         /// </summary>
         /// <param name="config"></param>
         /// <param name="container"></param>
-        /// <param name="onEndBuy"></param>
-        /// <typeparam name="TConfig"></typeparam>
-        /// <typeparam name="TContainer"></typeparam>
-        public virtual void OpenBuyMenu<TConfig, TContainer>(TConfig config, TContainer container, Action<TConfig> onEndBuy)
-            where TConfig : class
-            where TContainer : IPlayerContainer
+        public virtual void OpenBuyMenu(object config, IPlayerContainer container)
         {
             buyButton.onClick.AddListener(BuyAction);
             cancelButton.onClick.AddListener(Cancel);
+            
+            gameObject.SetActive(true);
             
             UpdateUI();
         }
 
         protected abstract void BuyAction();
         protected abstract void UpdateUI();
-        
         public virtual void Cancel()
         {
             errorWindow.gameObject.SetActive(false);
             gameObject.SetActive(false);
+            
+            buyButton.onClick.RemoveAllListeners();
+            buyButton.onClick.RemoveAllListeners();
         }
     }
 }
