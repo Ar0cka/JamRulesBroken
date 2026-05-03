@@ -1,4 +1,6 @@
 using System;
+using Player.Containers;
+using Player.PlayerProviders;
 using UISystem;
 using UISystem.Shops.Interfaces;
 using UnityEngine;
@@ -10,6 +12,10 @@ namespace Player
     {
         [SerializeField] private Camera cameraMain;
         [SerializeField] private LayerMask layerMask;
+        [SerializeField] private PlayerSpellContainer playerSpellContainer;
+        [SerializeField] private PlayerUnitContainer playerUnitContainer;
+        [SerializeField] private PlayerProvider playerProvider;
+        
         
         public void Update()
         {
@@ -21,8 +27,11 @@ namespace Player
                 
                 if (hit.collider != null && (hit.collider.CompareTag("Shops") || hit.collider.CompareTag("MageShop")))
                 {
+                    IPlayerContainer playerContainer =
+                        hit.collider.CompareTag("Shops") ? playerUnitContainer : playerSpellContainer;
+                    
                     var shop = hit.collider.gameObject.GetComponent<IShop>();
-                    shop.EnterToShop();
+                    shop.EnterToShop(playerProvider, playerContainer);
                 }
             }
         }

@@ -31,7 +31,7 @@ namespace BattleSystem
         private GridSystem _gridSystem;
 
         public int ActionPoints { get; private set; }
-        public string UnitName => _battleStates.UnitConfig.UnitName;
+        public string UnitName => _battleStates.UnitConfig.UnitData.unitName;
         
         public void InitializeUnit(UnitBattleStates battleStates, ObjectParent parent, Func<string, ObjectParent, bool> deadFunc, GridSystem gridSystem)
         {
@@ -149,13 +149,13 @@ namespace BattleSystem
             if (_battleStates.CurrentEffectData.EffectType == EffectType.Fire)
             {
                 yield return StartCoroutine(unitTakeHit.TakeHit(_battleStates.UnitConfig, _deadAction,
-                    _battleStates.CurrentEffectData.CurrentSpellData.SpellData.spellDamage));
+                    _battleStates.CurrentEffectData.CurrentSpellData.SpellStats.spellDamage));
             }
         }
         
         private void UnitIsDead()
         {
-            var delted = _deadFunc.Invoke(_battleStates.UnitConfig.UnitName, objectParent);
+            var delted = _deadFunc.Invoke(_battleStates.UnitConfig.UnitData.unitName, objectParent);
             
             if (delted)
                 Destroy(gameObject);

@@ -51,7 +51,7 @@ namespace BattleSystem
             foreach (var spell in spells)
             {
                 var spellCard = Instantiate(spellCardPrefab, spellParent, false);
-                spellCard.GetComponent<SpellCardSettings>().Initialize(spell.SpellName, spell.SpellIcon, chooseSpell);
+                spellCard.GetComponent<SpellCardSettings>().Initialize(spell.SpellData.spellName, spell.SpellVisualData.spellIcon, chooseSpell);
                 _spellChooseButtons.Add(spellCard.GetComponent<SpellCardSettings>());
             }
         }

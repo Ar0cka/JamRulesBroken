@@ -1,5 +1,7 @@
 using System;
 using Player;
+using Player.PlayerProviders;
+using Player.StateController;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,16 +12,15 @@ namespace DefaultNamespace
         [SerializeField] private Camera mainCamera;
         [SerializeField] private Vector2 hotspot;
         [SerializeField] private LayerMask targetMask;
-        [SerializeField] private PlayerStateController playerStateController;
-        
         [SerializeField] private Texture2D shopCursorTexture;
         [SerializeField] private Texture2D magicShopCursorTexture;
+        [SerializeField] private PlayerProvider playerProvider;
 
         private bool _cursorSet = false;
 
         private void Update()
         {
-            if (EventSystem.current.IsPointerOverGameObject() || playerStateController.IsShopOpen)
+            if (EventSystem.current.IsPointerOverGameObject() || playerProvider.GetCurrentState(PlayerStates.IsDialogWindow))
             {
                 UnsetCursor();
                 return;

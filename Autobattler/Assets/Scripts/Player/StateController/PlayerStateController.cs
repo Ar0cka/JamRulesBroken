@@ -1,13 +1,15 @@
-using System;
 using System.Collections.Generic;
-using Player.StateController;
-using UnityEngine;
 
-namespace Player
+namespace Player.StateController
 {
     public class PlayerStateController
     {
-        public Dictionary<PlayerStates, bool> PlayerStates = new();
+        public Dictionary<PlayerStates, bool> PlayerState = new Dictionary<PlayerStates, bool>()
+        {
+            { PlayerStates.IsDialogWindow , false},
+            { PlayerStates.IsWalking , false},
+            { PlayerStates.IsBook, false}
+        };
         
         /// <summary>
         /// Updating player target player state;
@@ -16,7 +18,7 @@ namespace Player
         /// <param name="currentState"></param>
         public void UpdatePlayerState(PlayerStates playerState, bool currentState)
         {
-            PlayerStates[playerState] = currentState;
+            PlayerState[playerState] = currentState;
         }
     }
 }

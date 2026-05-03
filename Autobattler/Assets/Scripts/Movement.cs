@@ -1,6 +1,8 @@
 using System;
 using System.Numerics;
 using Player;
+using Player.PlayerProviders;
+using Player.StateController;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,7 +16,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
 
-    [SerializeField] private PlayerStateController playerStateController;
+    [SerializeField] private PlayerProvider playerStateController;
     
     [Header("Animations")] 
     [SerializeField] private string animationWalkName;
@@ -26,7 +28,7 @@ public class Movement : MonoBehaviour
     
     public void Update()
     {
-        if (!playerStateController.CanMove || playerStateController.IsShopOpen || playerStateController.IsBookOpen || playerStateController.IsDialogWindow)
+        if (!playerStateController.GetCurrentState(PlayerStates.IsDialogWindow))
         {
             ResetMovement();
             

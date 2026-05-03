@@ -13,22 +13,24 @@ namespace BattleSystem
         
         public IEnumerator Action(UnitController unit, SpellConfig spellConfig, Vector2 targetPosition)
         {
-            spellAnimator.SetBool(spellConfig.AnimationName, true);
+            var animationConfig = spellConfig.SpellAnimations;
             
-            yield return StartCoroutine(Move(targetPosition, spellConfig.SpellData.spellSpeed));
+            spellAnimator.SetBool(animationConfig.flyAnimation, true);
             
-            spellAnimator.SetBool(spellConfig.AnimationName, false);
+            yield return StartCoroutine(Move(targetPosition, spellConfig.SpellStats.spellSpeed));
+            
+            spellAnimator.SetBool(animationConfig.flyAnimation, false);
             
             if (spellConfig.SpellData.spellType == SpellType.Damage)
             {
-                StartCoroutine(unit.TakeHit(spellConfig.SpellData.spellDamage));
+                StartCoroutine(unit.TakeHit(spellConfig.SpellStats.spellDamage));
                 Destroy(gameObject);
                 yield break;
             }
             
             if (spellConfig.SpellData.spellType == SpellType.Heal)
             {
-                unit.Heal(spellConfig.SpellData.spellDamage);
+                unit.Heal(spellConfig.SpellStats.spellDamage);
                 Destroy(gameObject);
                 yield break;
             }

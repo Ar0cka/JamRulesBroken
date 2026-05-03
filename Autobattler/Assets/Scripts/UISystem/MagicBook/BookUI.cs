@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Player;
+using Player.PlayerProviders;
+using Player.StateController;
 using ScriptableObjects;
 using ScriptableObjects.SpellConfigs;
 using TMPro;
@@ -22,7 +24,7 @@ namespace UISystem.MagicBook
         [SerializeField] private Button closeButton;
 
         [SerializeField] private Image spellImage;
-        [SerializeField] private PlayerStateController stateController;
+        [SerializeField] private PlayerProvider stateController;
 
         private List<SpellConfig> _spells = new();
         private bool _isOpen = false;
@@ -40,7 +42,7 @@ namespace UISystem.MagicBook
             
             _spells = playerSpells;
             _isOpen = true;
-            stateController.IsBookOpen = true;
+            stateController.SwitchPlayerState(PlayerStates.IsBook, true);
             gameObject.SetActive(true);
 
             closeButton.onClick.AddListener(Close);
@@ -53,11 +55,11 @@ namespace UISystem.MagicBook
 
         private void UpdateUI(SpellConfig currentSpell)
         {
-            spellName.text = $"Spell name: {currentSpell.SpellName}";
-            spellDescription.text = $"Description: {currentSpell.Description}";
-            spellImage.sprite = currentSpell.SpellIcon;
+            spellName.text = $"Spell name: {currentSpell.SpellData.spellName}";
+            spellDescription.text = $"Description: {currentSpell.SpellData.description}";
+            spellImage.sprite = currentSpell.SpellVisualData.spellIcon;
             spellType.text = $"Spell type: {currentSpell.SpellData.spellType}";
-            spellDamage.text = $"Damage: {currentSpell.SpellData.spellDamage}";
+            spellDamage.text = $"Damage: {currentSpell.SpellStats.spellDamage}";
         }
 
         private void Close()
@@ -68,7 +70,7 @@ namespace UISystem.MagicBook
             _spells.Clear();
             _currentPage = 0;
             _isOpen = false;
-            stateController.IsBookOpen = false;
+            stateController.SwitchPlayerState(PlayerStates.IsBook, false);
             gameObject.SetActive(false);
         }
 

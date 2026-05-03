@@ -16,6 +16,11 @@ namespace Player.PlayerProviders
         {
             _playerStateController.UpdatePlayerState(playerState, currentState);
         }
+
+        public bool GetCurrentState(PlayerStates playerStates)
+        {
+            return _playerStateController.PlayerState[playerStates];
+        }
     }
 
     public struct PlayerProviderData

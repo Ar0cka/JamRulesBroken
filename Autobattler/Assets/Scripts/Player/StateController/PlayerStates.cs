@@ -4,5 +4,6 @@ namespace Player.StateController
     {
         IsWalking,
         IsDialogWindow,
+        IsBook,
     }
 }

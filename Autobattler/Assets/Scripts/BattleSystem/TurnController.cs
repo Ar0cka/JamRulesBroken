@@ -103,7 +103,7 @@ namespace BattleSystem
                     continue;
                 }
 
-                if (_currentUnit.GetData().UnitConfig.Type == UnitType.Range)
+                if (_currentUnit.GetData().UnitConfig.UnitData.unitType == UnitType.Range)
                 {
                     var hit = Physics2D.OverlapCircleAll(_currentUnit.transform.position, overlapRadius);
 #if UNITY_EDITOR
@@ -209,7 +209,7 @@ namespace BattleSystem
                 
             unit.SetPosition(spawnPoint.x, spawnPoint.y, gridSystem.GetPosition(spawnPoint.y, spawnPoint.x));
 
-            var unitObject = Instantiate(unit.UnitConfig.UnitModel);
+            var unitObject = Instantiate(unit.UnitConfig.VisualData.unitModel);
             unitObject.transform.position = unit.CurrentWorldPosition;
             unitObject.name = $"{unitObject.name}:{parent}";
             
@@ -223,10 +223,10 @@ namespace BattleSystem
             
             if (parent == ObjectParent.Player)
             {
-                _playerUnits.Add(unit.UnitConfig.UnitName, unitController);
+                _playerUnits.Add(unit.UnitConfig.UnitData.unitName, unitController);
             }
             else
-                _enemyUnits.Add(unit.UnitConfig.UnitName, unitController);
+                _enemyUnits.Add(unit.UnitConfig.UnitData.unitName, unitController);
         }
         private void CreateNextTurn()
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Player;
+using Player.StateController;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,8 +35,8 @@ namespace UISystem.Tutor
             if (questUI != null) 
                 questUI.SetActive(false);
 
-            if (stateController != null)
-                stateController.IsDialogWindow = true;
+            // if (stateController != null)
+            //     stateController.IsDialogWindow = true;
             
             nextButton.onClick.AddListener(() =>
             {
@@ -60,8 +61,8 @@ namespace UISystem.Tutor
                 if (questUI != null)
                     questUI.SetActive(true);
 
-                if (stateController != null)
-                    stateController.IsDialogWindow = false;
+                // if (stateController != null)
+                //     stateController.IsDialogWindow = false;
                 
                 gameObject.SetActive(false);
                 isOpen = false;

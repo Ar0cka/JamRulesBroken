@@ -63,14 +63,14 @@ namespace BattleSystem
 
         public void InitializeSpells(List<SpellConfig> spellConfigs)
         {
-            _playerSpellList = spellConfigs.ToDictionary(x => x.SpellName, x => x);
+            _playerSpellList = spellConfigs.ToDictionary(x => x.SpellData.spellName, x => x);
         }
         
         private IEnumerator CastSpell(string spellName, UnitController unitController)
         {
             if (_playerSpellList.TryGetValue(spellName, out var value))
             {
-                var spellObject = Instantiate(value.SpellVfx);
+                var spellObject = Instantiate(value.SpellVisualData.spellObject);
                 spellObject.transform.position = new Vector3(spellPosition.position.x, spellPosition.position.y, 0);
 
                 Debug.Log($"Hit unit: {unitController.name} and him position = {unitController.GetData().CurrentWorldPosition}");

@@ -25,7 +25,7 @@ namespace Player
 
             foreach (var unit in units)
             {
-                _playerUnits.Add(unit.unitConfig.UnitName, unit);
+                _playerUnits.Add(unit.unitConfig.UnitData.unitName, unit);
             }
 
             foreach (var image in unitsImage)
@@ -38,14 +38,14 @@ namespace Player
 
         public void AddUnit(PlayerUnit unit)
         {
-            if (_playerUnits.TryGetValue(unit.unitConfig.UnitName, out var value))
+            if (_playerUnits.TryGetValue(unit.unitConfig.UnitData.unitName, out var value))
             {
                 value.unitCount += unit.unitCount;
                 UpdateImages();
                 return;
             }
             
-            _playerUnits.Add(unit.unitConfig.UnitName, unit);
+            _playerUnits.Add(unit.unitConfig.UnitData.unitName, unit);
             UpdateImages();
         }
 
@@ -59,7 +59,7 @@ namespace Player
 
                 if (value.unitCount <= 0)
                 {
-                    deletedUnitName = value.unitConfig.UnitName;
+                    deletedUnitName = value.unitConfig.UnitData.unitName;
                     value.unitCount = 0;
                 }
             }
@@ -76,7 +76,7 @@ namespace Player
 
             foreach (var data in unitData)
             {
-                _playerUnits.Add(data.UnitConfig.UnitName, new PlayerUnit
+                _playerUnits.Add(data.UnitConfig.UnitData.unitName, new PlayerUnit
                 {
                     unitConfig = data.UnitConfig,
                     unitCount = data.Count
@@ -105,7 +105,7 @@ namespace Player
                 if (!unitsImage[i].gameObject.activeInHierarchy)
                     unitsImage[i].gameObject.SetActive(true);
                 
-                unitsImage[i].SetUnit(value.unitConfig.UnitSprite, value.unitCount);
+                unitsImage[i].SetUnit(value.unitConfig.VisualData.unitSprite, value.unitCount);
             }
         }
     }

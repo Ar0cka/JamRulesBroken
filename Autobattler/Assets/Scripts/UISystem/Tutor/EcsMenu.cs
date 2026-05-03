@@ -1,5 +1,7 @@
 using System;
 using Player;
+using Player.PlayerProviders;
+using Player.StateController;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,7 +10,7 @@ namespace UISystem.Tutor
 {
     public class EcsMenu : MonoBehaviour
     {
-        [SerializeField] private PlayerStateController stateController;
+        [SerializeField] private PlayerProvider playerProvider;
         [SerializeField] private Button exitButton;
         [SerializeField] private Button returnButton;
         [SerializeField] private GameObject dialogWindow;
@@ -21,7 +23,7 @@ namespace UISystem.Tutor
                     return;
                 
                 dialogWindow.SetActive(true);
-                stateController.IsDialogWindow = true;
+                playerProvider.SwitchPlayerState(PlayerStates.IsDialogWindow, true);
             }
         }
 
@@ -34,7 +36,7 @@ namespace UISystem.Tutor
             
             returnButton.onClick.AddListener(() =>
             {
-                stateController.IsDialogWindow = false;
+                playerProvider.SwitchPlayerState(PlayerStates.IsDialogWindow, false);
                 dialogWindow.SetActive(false);
             });
         }
