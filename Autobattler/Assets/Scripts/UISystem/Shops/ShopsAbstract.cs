@@ -59,7 +59,6 @@ namespace UISystem.Shops
             
             exitButton.onClick.AddListener(Exit);
             
-            
             shopObject.SetActive(true);
             SwitchState(true);
         }

@@ -4,7 +4,7 @@ using UISystem.ShopButton;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UISystem
+namespace UISystem.Shops.TavernShop
 {
     public class BuyButton : BaseBuyButton<UnitShopConfig>
     {

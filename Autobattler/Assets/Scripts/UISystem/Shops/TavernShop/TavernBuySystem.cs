@@ -6,6 +6,7 @@ using ScriptableObjects;
 using ShopSystem;
 using TMPro;
 using UISystem.Shops;
+using UISystem.Shops.TavernShop;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;

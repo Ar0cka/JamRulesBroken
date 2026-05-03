@@ -41,7 +41,7 @@ namespace UISystem.ShopButton
         public virtual void Dispose()
         {
             BuySystem = null;
-            Config = default;
+            Config = null;
             
             buyButton.onClick.RemoveAllListeners();
         }

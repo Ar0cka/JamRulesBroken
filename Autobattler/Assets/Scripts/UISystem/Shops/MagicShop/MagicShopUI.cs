@@ -34,5 +34,13 @@ namespace UISystem.MagicLavka
                 BuyButtons.Add(buttonInitialize);
             }
         }
+
+        protected override void Exit()
+        {
+            if (buySystem.gameObject.activeSelf)
+                buySystem.Cancel();
+            
+            base.Exit();
+        }
     }
 }
