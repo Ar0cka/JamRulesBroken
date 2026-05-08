@@ -1,0 +1,57 @@
+using Game.Data.WorldSceneConfigs;
+using Game.World.MoneySystem;
+using TMPro;
+using UnityEngine;
+
+namespace Game.World.NpcDialogScript
+{
+    public class QuestCardUI : MonoBehaviour
+    {
+        [SerializeField] private TextMeshProUGUI questTitleText;
+        [SerializeField] private TextMeshProUGUI questDescriptionText;
+
+        private QuestState _questState;
+        private QuestData _questData;
+        
+        private Wallet _playerWallet;
+        
+        public void SetQuest(QuestData questData, Wallet playerWallet, int amount = 0)
+        {
+            _questState = QuestState.Active;
+            _playerWallet = playerWallet;
+            
+            _questData = questData;
+            
+            questTitleText.text = $"{_questState}: {_questData.questName}\n{_questData.neededItems.ItemName}: {amount}/{_questData.neededAmount}";
+        }
+
+        public void UpdateQuestProgress(int amountToAdd)
+        {
+            if (_questState == QuestState.Active)
+            {
+                if (amountToAdd >= _questData.neededAmount)
+                {
+                    _questState = QuestState.ReadyToComplete;
+                }
+                
+                questTitleText.text = $"{_questState}: {_questData.questName}\n{_questData.neededItems.ItemName}: {amountToAdd}/{_questData.neededAmount}";
+               // questDescriptionText.text = $"{_questData.questDescription}: {amountToAdd}/{_questData.neededAmount}";
+            }
+        }
+
+        public void CompleteQuest()
+        {
+            _questState = QuestState.Completed;
+            questTitleText.text = $"{_questState}:{_questData.questName}";
+            _playerWallet.AddMoney(_questData.cashForQuest);
+        }
+    }
+
+    public enum QuestState
+    {
+        Active,
+        Completed,
+        ReadyToComplete,
+        Failed
+    }
+}
