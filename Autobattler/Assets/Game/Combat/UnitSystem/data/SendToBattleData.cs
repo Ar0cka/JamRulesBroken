@@ -1,26 +1,30 @@
+using System;
 using System.Collections.Generic;
-using BattleSystem.UnitSystem.data;
+using BattleSystem;
 using Game.Data.SpellConfigs;
+using Game.Data.UnitConfigs;
 
-namespace BattleSystem.UnitSystem
+namespace Game.Combat.UnitSystem.data
 {
+    [Serializable]
     public class SendToBattleData
     {
-        public SendToBattleData(List<UnitBattleStates> playerUnits, List<UnitBattleStates> enemyUnits, List<SpellConfig> playerSpells)
+        public SendToBattleData(List<UnitWorldInfo> playerUnits, List<UnitWorldInfo> enemyUnits, List<SpellConfig> playerSpells)
         {
-            PlayerUnits = playerUnits;
-            EnemyUnits = enemyUnits;
-            PlayerSpells = playerSpells;
+            this.playerUnits = playerUnits;
+            this.enemyUnits = enemyUnits;
+            this.playerSpells = playerSpells;
         }
         
-        public List<UnitBattleStates> PlayerUnits;
-        public List<UnitBattleStates> EnemyUnits;
-        public List<SpellConfig> PlayerSpells;
+        public List<UnitWorldInfo> playerUnits;
+        public List<UnitWorldInfo> enemyUnits;
+        public List<SpellConfig> playerSpells;
     }
 
+    [Serializable]
     public class SendToOutputData
     {
-        public List<UnitBattleStates> UnitData;
-        public FightResult ResultFight;
+        public List<UnitWorldInfo> playerUnits;
+        public FightResult resultFight;
     }
 }

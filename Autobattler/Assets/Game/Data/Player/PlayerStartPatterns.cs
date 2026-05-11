@@ -14,8 +14,8 @@ namespace Game.Data.Player
         {
             return new PlayerCollection
             {
-                generalsPatterns = new List<GeneralPattern>(StartPlayerPatterns.generalsPatterns),
-                samplePatterns =  new List<SamplePattern>(StartPlayerPatterns.samplePatterns)
+                generalsPatterns = new List<GeneralPatternData>(StartPlayerPatterns.generalsPatterns),
+                samplePatterns =  new List<SamplePatternData>(StartPlayerPatterns.samplePatterns)
             };
         }
     }
@@ -23,7 +23,7 @@ namespace Game.Data.Player
     [Serializable]
     public class PlayerCollection
     {
-        public List<GeneralPattern> generalsPatterns;
-        public List<SamplePattern> samplePatterns;
+        public List<GeneralPatternData> generalsPatterns;
+        public List<SamplePatternData> samplePatterns;
     }
 }

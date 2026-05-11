@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using BattleSystem;
+using Game.Combat.Grid;
 using Grid;
 using UnityEngine;
 
 namespace Grid
 {
-    public class GridSystem : MonoBehaviour
+    public class GridSystem : MonoBehaviour, ITurnGrid
     {
         [SerializeField] private float cellSize;
         [SerializeField] private float stepInterval;

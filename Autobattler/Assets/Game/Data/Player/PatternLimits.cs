@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Game.Data.Player
 {
     [CreateAssetMenu(fileName = "pattern settings", menuName = "Patterns/PlayerPatternSettings")]
-    public class PlayerPatternData : ScriptableObject
+    public class PatternLimits : ScriptableObject
     {
         [field:SerializeField] public PlayerPatternSettings PlayerPatternSettings { get; private set; }
 

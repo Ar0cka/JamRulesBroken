@@ -29,9 +29,9 @@ namespace BattleSystem.BattleStategy
         
         private UnitBattleStates _unitBattleStates;
 
-        public void InitializeUnitHitPoints(UnitBattleStates unitBattleStates, ObjectParent objectParent)
+        public void InitializeUnitHitPoints(UnitBattleStates unitBattleStates, UnitParent unitParent)
         {
-            if (objectParent == ObjectParent.Enemy)
+            if (unitParent == UnitParent.Enemy)
                 countBac.color = Color.red;
             
             Count = unitBattleStates.Count;
