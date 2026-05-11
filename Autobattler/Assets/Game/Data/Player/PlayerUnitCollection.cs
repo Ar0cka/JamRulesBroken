@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Game.Data.UnitConfigs;
 using UnityEngine;
@@ -8,15 +7,15 @@ namespace Game.Data.Player
     [CreateAssetMenu(fileName = "playerUnits", menuName = "Config/PlayerUnits", order = 0)]
     public class PlayerUnitCollection : ScriptableObject
     {
-        [SerializeField] private List<PlayerUnit> startUnits;
+        [SerializeField] private List<UnitWorldInfo> startUnits;
 
-        public List<PlayerUnit> CloneUnitsConfig()
+        public List<UnitWorldInfo> CloneUnitsConfig()
         {
-            var playerUnit = new List<PlayerUnit>();
+            var playerUnit = new List<UnitWorldInfo>();
 
             foreach (var unit in startUnits)
             {
-                playerUnit.Add(new PlayerUnit
+                playerUnit.Add(new UnitWorldInfo
                 {
                     unitConfig = unit.unitConfig,
                     unitCount = unit.unitCount
@@ -25,12 +24,5 @@ namespace Game.Data.Player
 
             return playerUnit;
         }
-    }
-
-    [Serializable]
-    public class PlayerUnit
-    {
-        public UnitConfig unitConfig;
-        public int unitCount;
     }
 }

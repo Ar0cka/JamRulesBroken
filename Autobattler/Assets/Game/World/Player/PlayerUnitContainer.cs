@@ -4,6 +4,7 @@ using System.Linq;
 using BattleSystem.UnitSystem.data;
 using Game.Data;
 using Game.Data.Player;
+using Game.Data.UnitConfigs;
 using Game.World.Player.Interfaces;
 using UISystem;
 using UnityEngine;
@@ -15,8 +16,8 @@ namespace Game.World.Player
         [SerializeField] private PlayerUnitCollection startUnits;
         [SerializeField] private List<HydeUnits> unitsImage;
         
-        private readonly Dictionary<string, PlayerUnit> _playerUnits = new();
-        public Dictionary<string, PlayerUnit> PlayerUnits => _playerUnits;
+        private readonly Dictionary<string, UnitWorldInfo> _playerUnits = new();
+        public Dictionary<string, UnitWorldInfo> PlayerUnits => _playerUnits;
 
         private void Awake()
         {
@@ -35,16 +36,16 @@ namespace Game.World.Player
             UpdateImages();
         }
 
-        public void AddUnit(PlayerUnit unit)
+        public void AddUnit(UnitWorldInfo unitWorldInfo)
         {
-            if (_playerUnits.TryGetValue(unit.unitConfig.UnitID, out var value))
+            if (_playerUnits.TryGetValue(unitWorldInfo.unitConfig.UnitID, out var value))
             {
-                value.unitCount += unit.unitCount;
+                value.unitCount += unitWorldInfo.unitCount;
                 UpdateImages();
                 return;
             }
             
-            _playerUnits.Add(unit.unitConfig.UnitID, unit);
+            _playerUnits.Add(unitWorldInfo.unitConfig.UnitID, unitWorldInfo);
             UpdateImages();
         }
         public void RebuildUnitsAfterFight(List<UnitBattleStates> unitData)
@@ -53,7 +54,7 @@ namespace Game.World.Player
 
             foreach (var data in unitData)
             {
-                _playerUnits.Add(data.UnitConfig.UnitID, new PlayerUnit
+                _playerUnits.Add(data.UnitConfig.UnitID, new UnitWorldInfo
                 {
                     unitConfig = data.UnitConfig,
                     unitCount = data.Count
@@ -85,12 +86,5 @@ namespace Game.World.Player
                 unitsImage[i].SetUnit(value.unitConfig.VisualData.unitSprite, value.unitCount);
             }
         }
-    }
-
-    [Serializable]
-    public class UnitDeathData
-    {
-        public string unitName;
-        public int deathCount;
     }
 }

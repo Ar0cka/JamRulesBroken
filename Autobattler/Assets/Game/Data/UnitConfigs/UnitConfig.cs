@@ -9,17 +9,18 @@ namespace Game.Data.UnitConfigs
     public class UnitConfig : ScriptableObject
     {
         [field: SerializeField] public string UnitID { get; private set; }
-        [field: SerializeField] public UnitData UnitData { get; private set; }
+        [field: SerializeField] public UnitDefinition UnitDefinition { get; private set; }
         [field: SerializeField] public UnitMovement Movement { get; private set; }
         [field: SerializeField] public UnitStats Stats { get; private set; }
         [field: SerializeField] public UnitAnimation Animation { get; private set; }
         [field: SerializeField] public UnitVisualData VisualData { get; private set; }
-        [field: SerializeField] public List<UnitsPattern> UnitPattern { get; private set; }
+        
+        [field: SerializeField] public List<UnitPattern> UnitPatterns { get; private set; }
         
     }
 
     [Serializable]
-    public class UnitData
+    public class UnitDefinition
     {
         public string unitName;
         public string unitDescription;

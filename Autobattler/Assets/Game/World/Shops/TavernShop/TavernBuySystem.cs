@@ -3,6 +3,7 @@ using Game.Core.ShopAbstract;
 using Game.Data;
 using Game.Data.Player;
 using Game.Data.ShopConfigs;
+using Game.Data.UnitConfigs;
 using Game.World.Player;
 using Game.World.Player.Interfaces;
 using TMPro;
@@ -60,7 +61,7 @@ namespace Game.World.Shops.TavernShop
             }
             
             _config.count -= buyCount;
-            _playerContainer.AddUnit(new PlayerUnit
+            _playerContainer.AddUnit(new UnitWorldInfo
             {
                 unitConfig = _config.config,
                 unitCount = buyCount
@@ -74,7 +75,7 @@ namespace Game.World.Shops.TavernShop
         protected override void UpdateUI()
         {
             productImage.sprite = _config.config.VisualData.unitSprite;
-            productName.text = _config.config.UnitData.unitName;
+            productName.text = _config.config.UnitDefinition.unitName;
             
             countSlider.onValueChanged.AddListener(OnSliderValueChanged);
             countSlider.maxValue = _config.count;

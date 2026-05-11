@@ -4,6 +4,7 @@ using System.Linq;
 using BattleSystem;
 using BattleSystem.UnitSystem;
 using BattleSystem.UnitSystem.data;
+using Game.Combat.UnitSystem.data;
 using Game.Data.WorldSceneConfigs;
 using Game.World.MoneySystem;
 using Game.World.Player;
@@ -114,7 +115,7 @@ namespace Game.Core.SceneManagerWorld
 
         public void TakeOutputData(SendToOutputData outputData)
         {
-            if (outputData.ResultFight == FightResult.Lose)
+            if (outputData.resultFight == FightResult.Lose)
             {
                 SceneManager.UnloadSceneAsync(_scene);
                 SceneManager.LoadScene(mainScene);
@@ -138,7 +139,7 @@ namespace Game.Core.SceneManagerWorld
             
             playerStartFight.FightIsEnd();
             
-            playerUnitContainer.RebuildUnitsAfterFight(outputData.UnitData);
+            playerUnitContainer.RebuildUnitsAfterFight(outputData.playerUnits);
             playerWallet.AddMoney(_enemyConfig.EnemyStats.money);
 
             _enemyConfig = null;

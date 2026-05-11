@@ -23,20 +23,19 @@ namespace BattleSystem
         [SerializeField] private float distance = 2f;
         private UnitBattleStates _battleStates;
         
-        [HideInInspector] public ObjectParent objectParent;
+        [HideInInspector] public UnitParent unitParent;
 
-        private Func<string, ObjectParent, bool> _deadFunc;
+        private Func<string, UnitParent, bool> _deadFunc;
         private Action _deadAction;
         private GridSystem _gridSystem;
 
         public int ActionPoints { get; private set; }
-        public string UnitName => _battleStates.UnitConfig.UnitData.unitName;
+        public string UnitName => _battleStates.WorldInfo.unitConfig.UnitDefinition.unitName;
         
-        public void InitializeUnit(UnitBattleStates battleStates, ObjectParent parent, Func<string, ObjectParent, bool> deadFunc, GridSystem gridSystem)
+        public void InitializeUnit(UnitBattleStates battleStates, UnitParent parent, GridSystem gridSystem)
         {
             _battleStates = battleStates;
-            _deadFunc = deadFunc;
-            objectParent = parent;
+            unitParent = parent;
             _gridSystem = gridSystem;
           
             
@@ -56,7 +55,7 @@ namespace BattleSystem
 
         public IEnumerator UnitTurnActions(List<GridData> targetPath)
         {
-            ActionPoints = _battleStates.UnitConfig.Stats.cellsInTurn;
+            ActionPoints = _battleStates.WorldInfo.unitConfig.Stats.cellsInTurn;
 
             if (_battleStates.CurrentEffectData.TurnsLess > 0 || _battleStates.CurrentEffectData.EffectType == EffectType.None)
             {
@@ -85,7 +84,7 @@ namespace BattleSystem
                 {
                     var unitController = hit.GetComponent<UnitController>();
 
-                    if (unitController.objectParent != objectParent)
+                    if (unitController.unitParent != unitParent)
                     {
                         yield return StartCoroutine(Attack(unitController));
                         continue;
@@ -102,8 +101,8 @@ namespace BattleSystem
         public IEnumerator Move(Vector2 targetPosition)
         {
             ActionPoints--;
-            yield return StartCoroutine(unitMove.Move(targetPosition, _battleStates.UnitConfig.Movement.speed,
-                _battleStates.UnitConfig.Animation.walk));
+            yield return StartCoroutine(unitMove.Move(targetPosition, _battleStates.WorldInfo.unitConfig.Movement.speed,
+                _battleStates.WorldInfo.unitConfig.Animation.walk));
         }
         
         public IEnumerator Attack(UnitController targetController)
@@ -114,7 +113,7 @@ namespace BattleSystem
         
         public IEnumerator TakeHit(int damage)
         {
-            yield return StartCoroutine(unitTakeHit.TakeHit(_battleStates.UnitConfig, _deadAction, damage));
+            yield return StartCoroutine(unitTakeHit.TakeHit(_battleStates.WorldInfo.unitConfig, _deadAction, damage));
         }
 
         public void Heal(int healCount)
@@ -147,14 +146,14 @@ namespace BattleSystem
 
             if (_battleStates.CurrentEffectData.EffectType == EffectType.Fire)
             {
-                yield return StartCoroutine(unitTakeHit.TakeHit(_battleStates.UnitConfig, _deadAction,
+                yield return StartCoroutine(unitTakeHit.TakeHit(_battleStates.WorldInfo.unitConfig, _deadAction,
                     _battleStates.CurrentEffectData.CurrentSpellData.SpellStats.spellDamage));
             }
         }
         
         private void UnitIsDead()
         {
-            var delted = _deadFunc.Invoke(_battleStates.UnitConfig.UnitData.unitName, objectParent);
+            var delted = _deadFunc.Invoke(_battleStates.WorldInfo.unitConfig.UnitDefinition.unitName, unitParent);
             
             if (delted)
                 Destroy(gameObject);

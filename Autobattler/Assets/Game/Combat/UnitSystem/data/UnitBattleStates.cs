@@ -4,16 +4,15 @@ using UnityEngine;
 
 namespace BattleSystem.UnitSystem.data
 {
-    [Serializable]
     public class UnitBattleStates
     {
-        public UnitBattleStates(UnitConfig unitConfig, int count)
+        public UnitBattleStates(UnitWorldInfo worldInfo)
         {
-            UnitConfig = unitConfig;
-            Count = count;
-
+            WorldInfo = worldInfo;
             CurrentEffectData = new EffectUnitData();
         }
+        
+        public UnitWorldInfo WorldInfo;
         
         public EffectUnitData CurrentEffectData;
         
@@ -21,9 +20,6 @@ namespace BattleSystem.UnitSystem.data
 
         public int X { get; private set; } = -1;
         public int Y { get; private set; } = -1;
-        
-        [field:SerializeField] public UnitConfig UnitConfig { get; private set; }
-        [field:SerializeField] public int Count { get; private set; }
         
         public void SetPosition(int x, int y, Vector2 worldPosition)
         {
@@ -39,7 +35,7 @@ namespace BattleSystem.UnitSystem.data
 
         public void SetNewCount(int newCount)
         {
-            Count = newCount;
+            WorldInfo.unitCount = newCount;
         }
     }
 }

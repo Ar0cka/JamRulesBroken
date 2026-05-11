@@ -1,19 +1,27 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Data.Patterns
 {
-    public abstract class DefaultPattern : ScriptableObject
+    [Serializable]
+    public abstract class DefaultPattern
     {
-        [Header("Pattern data")]
-        [field: SerializeField] public string PatternId { get; private set; }
-        [field: SerializeField] public string Name { get; private set; }
+        [field: SerializeField] public string PatternID { get; private set; }
+        [field: SerializeField] public string PatternName { get; private set; }
 
-        [Header("Buffs/Debuffs")]
-        [field: SerializeField] public List<string> Buffs { get; private set; }
-        [field: SerializeField] public List<string> Debuffs { get; private set; }
-        
-        [Header("Pattern cooldown")]
+        [field: SerializeField] public List<EffectConfig> PatternEffects { get; private set; }
+        [field: SerializeField] public List<EffectiveTargets> EffectiveTargets { get; private set; }
+
         [field: SerializeField] public int Cooldown { get; private set; }
+        
+        [field: SerializeField] public PatternType PatternType { get; private set; }
+    }
+    
+    public enum PatternType
+    {
+        General, 
+        Sample,
+        Unit
     }
 }

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using BattleSystem;
 using BattleSystem.UnitSystem;
 using BattleSystem.UnitSystem.data;
+using Game.Combat.UnitSystem.data;
 using Game.Core.SceneManagerWorld;
 using Grid;
 using UnityEngine;
@@ -32,8 +33,8 @@ public class BattleBootstrap : MonoBehaviour
         var data = SwitchScene.Instance.GetData();
         turnManager.Initialize(data, _isOutputData);
         
-        playerCastSystem.InitializeSpells(data.PlayerSpells);
-        chooseSpell.Initialize(data.PlayerSpells);
+        playerCastSystem.InitializeSpells(data.playerSpells);
+        chooseSpell.Initialize(data.playerSpells);
     }
 
     private void End(SendToOutputData data)

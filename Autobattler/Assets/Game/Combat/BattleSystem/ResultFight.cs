@@ -1,4 +1,5 @@
 using BattleSystem.UnitSystem;
+using Game.Combat.UnitSystem.data;
 using Game.Core.SceneManagerWorld;
 using TMPro;
 using UnityEngine;
@@ -18,9 +19,9 @@ namespace BattleSystem
         {
             _sendToOutputData = outputData;
             
-            resultText.text = $"Result fight: {_sendToOutputData.ResultFight}";
+            resultText.text = $"Result fight: {_sendToOutputData.resultFight}";
 
-            if (_sendToOutputData.ResultFight == FightResult.Lose)
+            if (_sendToOutputData.resultFight == FightResult.Lose)
                 moneyReward = 0;
                 
             rewardText.text = $"Money reward: {moneyReward}";

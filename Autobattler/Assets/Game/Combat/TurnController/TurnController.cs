@@ -5,6 +5,7 @@ using System.Linq;
 using BattleSystem.UnitSystem;
 using BattleSystem.UnitSystem.data;
 using DefaultNamespace.Pathfiender;
+using Game.Combat.UnitSystem.data;
 using Game.Data.UnitConfigs;
 using Grid;
 using TMPro;
@@ -34,7 +35,7 @@ namespace BattleSystem
         
         private Queue<UnitController> _turnQueue = new();
         
-        private Func<string, ObjectParent, bool> _isUnitDead;
+        private Func<string, UnitParent, bool> _isUnitDead;
         private Action<SendToOutputData> _isOutputData;
         private Action _nextUnitTurn;
 
@@ -54,13 +55,13 @@ namespace BattleSystem
             _isUnitDead = UnitDead;
             _isOutputData = outputDataEvent;
          
-            foreach (var unit in data.PlayerUnits)
+            foreach (var unit in data.playerUnits)
             { 
-                CreateUnit(ObjectParent.Player, unit);
+                CreateUnit(UnitParent.Player, unit);
             }
-            foreach (var enemyUnit in data.EnemyUnits)
+            foreach (var enemyUnit in data.enemyUnits)
             {
-                CreateUnit(ObjectParent.Enemy, enemyUnit);
+                CreateUnit(UnitParent.Enemy, enemyUnit);
             }
             
             WaitActionPlayer += () =>
@@ -102,14 +103,14 @@ namespace BattleSystem
                     continue;
                 }
 
-                if (_currentUnit.GetData().UnitConfig.UnitData.unitType == UnitType.Range)
+                if (_currentUnit.GetData().UnitConfig.UnitDefinition.unitType == UnitType.Range)
                 {
                     var hit = Physics2D.OverlapCircleAll(_currentUnit.transform.position, overlapRadius);
 #if UNITY_EDITOR
                     overlapVector = _currentUnit.transform.position;
 #endif
 
-                    if (hit.Any(h => h.CompareTag("Unit") && h.GetComponent<UnitController>().objectParent != _currentUnit.objectParent))
+                    if (hit.Any(h => h.CompareTag("Unit") && h.GetComponent<UnitController>().unitParent != _currentUnit.unitParent))
                     {
                         var freeSell = gridSystem.GetFreeCells(_currentUnit.GetData().X, _currentUnit.GetData().Y, 0.5f);
                         
@@ -124,7 +125,7 @@ namespace BattleSystem
                             _currentUnit.SetUnitPosition(freeSell.X, freeSell.Y, targetVector);
                         }
                         
-                        var hitFirst = hit.FirstOrDefault(x => x.CompareTag("Unit") && x.GetComponent<UnitController>().objectParent != _currentUnit.objectParent);
+                        var hitFirst = hit.FirstOrDefault(x => x.CompareTag("Unit") && x.GetComponent<UnitController>().unitParent != _currentUnit.unitParent);
                         
                         if (hitFirst != null)
                         {
@@ -145,7 +146,7 @@ namespace BattleSystem
                     continue;
                 }
                 
-                var targetUnit = FindTarget(_currentUnit.objectParent, _currentUnit.transform);
+                var targetUnit = FindTarget(_currentUnit.unitParent, _currentUnit.transform);
 
                 var data = targetUnit.GetData();
                 
@@ -158,7 +159,7 @@ namespace BattleSystem
             CreateNextTurn();
         }
 
-        private UnitController FindTarget(ObjectParent currentUnitType, Transform currentPos)
+        private UnitController FindTarget(UnitParent currentUnitType, Transform currentPos)
         {
             var hit = Physics2D.OverlapAreaAll(currentPos.position,
                 currentPos.position + new Vector3(overlapRadius, overlapRadius, 0));
@@ -170,16 +171,16 @@ namespace BattleSystem
                 
                 var unitController = target.GetComponent<UnitController>();
                 
-                if (unitController.objectParent == currentUnitType) continue;
+                if (unitController.unitParent == currentUnitType) continue;
 
                 return unitController;
             }
 
             switch (currentUnitType)
             {
-                case ObjectParent.Player:
+                case UnitParent.Player:
                     return _enemyUnits.Values.ElementAt(Random.Range(0, _enemyUnits.Count - 1));
-                case ObjectParent.Enemy:
+                case UnitParent.Enemy:
                     return _playerUnits.Values.ElementAt(Random.Range(0, _playerUnits.Count - 1));
             }
 
@@ -193,39 +194,18 @@ namespace BattleSystem
 
         private UnitController GetRandomEnemyUnit(UnitController currentUnit)
         {
-            switch (currentUnit.objectParent)
+            switch (currentUnit.unitParent)
             {
-                case ObjectParent.Player:
+                case UnitParent.Player:
                     return _enemyUnits.Values.ElementAt(Random.Range(0, _enemyUnits.Count));
                 default:
                     return _playerUnits.Values.ElementAt(Random.Range(0, _playerUnits.Count));
             }
         }
         
-        private void CreateUnit(ObjectParent parent, UnitBattleStates unit)
+        private void CreateUnit(UnitParent parent, UnitBattleStates unit)
         {
-            var spawnPoint = parent == ObjectParent.Player ? gridSystem.GetRandomPlayerCell() : gridSystem.GetRandomEnemyCell();
-                
-            unit.SetPosition(spawnPoint.x, spawnPoint.y, gridSystem.GetPosition(spawnPoint.y, spawnPoint.x));
-
-            var unitObject = Instantiate(unit.UnitConfig.VisualData.unitModel);
-            unitObject.transform.position = unit.CurrentWorldPosition;
-            unitObject.name = $"{unitObject.name}:{parent}";
-            
-            var unitController = unitObject.GetComponent<UnitController>();
-            unitController.InitializeUnit(unit, parent, _isUnitDead, gridSystem);
-
-            if (unitController.objectParent == ObjectParent.Enemy)
-            {
-                unitController.GetComponent<SpriteRenderer>().flipX = true;
-            }
-            
-            if (parent == ObjectParent.Player)
-            {
-                _playerUnits.Add(unit.UnitConfig.UnitData.unitName, unitController);
-            }
-            else
-                _enemyUnits.Add(unit.UnitConfig.UnitData.unitName, unitController);
+           
         }
         private void CreateNextTurn()
         {
@@ -256,16 +236,16 @@ namespace BattleSystem
         {
             turnText.text = $"Turn: {_currentTurn}";
         }
-        private bool UnitDead(string unitName, ObjectParent parent)
+        private bool UnitDead(string unitName, UnitParent parent)
         {
             try
             {
                 switch (parent)
                 {
-                    case ObjectParent.Player:
+                    case UnitParent.Player:
                         _playerUnits.Remove(unitName);
                         break;
-                    case ObjectParent.Enemy:
+                    case UnitParent.Enemy:
                         _enemyUnits.Remove(unitName);
                         break;
                 }
@@ -281,14 +261,14 @@ namespace BattleSystem
         private void EndBattle()
         {
             var outputData = new SendToOutputData();
-            outputData.UnitData = new();
+            outputData.playerUnits = new();
             
             foreach (var unit in _playerUnits.Values)
             {
-                outputData.UnitData.Add(unit.GetData());
+                outputData.playerUnits.Add(unit.GetData());
             }
 
-            outputData.ResultFight = _playerUnits.Count > 0 ? FightResult.Win : FightResult.Lose;
+            outputData.resultFight = _playerUnits.Count > 0 ? FightResult.Win : FightResult.Lose;
             _isOutputData.Invoke(outputData);
             
             //TODO Switch scene
@@ -325,7 +305,7 @@ namespace BattleSystem
 #endif
     }
     
-    public enum ObjectParent
+    public enum UnitParent
     {
         Player,
         Enemy
