@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using BattleSystem.BattleStategy;
 using BattleSystem.UnitSystem.data;
+using Cysharp.Threading.Tasks;
 using Game.Data.SpellConfigs;
 using Grid;
 using UnityEngine;
 
 namespace BattleSystem
 {
-    public class UnitController : MonoBehaviour
+    public class OldUnitController : MonoBehaviour
     {
         [Header("Scripts")]
         [SerializeField] private UnitMove unitMove;
@@ -21,7 +22,7 @@ namespace BattleSystem
         [SerializeField] private float overlapRadius = 1;
         [SerializeField] private float overlapRadiusArea = 1.5f;
         [SerializeField] private float distance = 2f;
-        private UnitBattleStates _battleStates;
+        private UnitCombatInfo _combatInfo;
         
         [HideInInspector] public UnitParent unitParent;
 
@@ -30,37 +31,47 @@ namespace BattleSystem
         private GridSystem _gridSystem;
 
         public int ActionPoints { get; private set; }
-        public string UnitName => _battleStates.WorldInfo.unitConfig.UnitDefinition.unitName;
+        public string UnitName => _combatInfo.WorldInfo.unitConfig.UnitDefinition.unitName;
         
-        public void InitializeUnit(UnitBattleStates battleStates, UnitParent parent, GridSystem gridSystem)
+        public void InitializeUnit(UnitCombatInfo combatInfo, UnitParent parent, GridSystem gridSystem)
         {
-            _battleStates = battleStates;
+            _combatInfo = combatInfo;
             unitParent = parent;
             _gridSystem = gridSystem;
           
             
             _deadAction = UnitIsDead;
-            unitTakeHit.InitializeUnitHitPoints(battleStates, parent);
+            unitTakeHit.InitializeUnitHitPoints(combatInfo, parent);
         }
         
-        public UnitBattleStates GetData() => _battleStates;
+        public UnitCombatInfo GetData() => _combatInfo;
         public void SetUnitPosition(int x, int y, Vector2 worldPos)
         {
-            if (_battleStates.X != -1 && _battleStates.Y != -1) 
-                _gridSystem.SetWalkable(_battleStates.X, _battleStates.Y, true);
+            if (_combatInfo.X != -1 && _combatInfo.Y != -1) 
+                _gridSystem.SetWalkable(_combatInfo.X, _combatInfo.Y, true);
             
-            _battleStates.SetPosition(x, y, worldPos);
+            _combatInfo.SetPosition(x, y, worldPos);
             _gridSystem.SetWalkable(x, y, false);
         }
 
+        public async UniTask UnitAction()
+        {
+            
+        }
+
+        public void ChooseTarget()
+        {
+            
+        }
+        
         public IEnumerator UnitTurnActions(List<GridData> targetPath)
         {
-            ActionPoints = _battleStates.WorldInfo.unitConfig.Stats.cellsInTurn;
+            ActionPoints = _combatInfo.WorldInfo.unitConfig.Stats.cellsInTurn;
 
-            if (_battleStates.CurrentEffectData.TurnsLess > 0 || _battleStates.CurrentEffectData.EffectType == EffectType.None)
+            if (_combatInfo.CurrentEffectData.TurnsLess > 0 || _combatInfo.CurrentEffectData.EffectType == EffectType.None)
             {
                 yield return StartCoroutine(ChooseEffectiveAction());
-                _battleStates.CurrentEffectData.EffectTurnPassed();
+                _combatInfo.CurrentEffectData.EffectTurnPassed();
             }
             
             foreach (var path in targetPath)
@@ -82,7 +93,7 @@ namespace BattleSystem
                 
                 if (hit != null)
                 {
-                    var unitController = hit.GetComponent<UnitController>();
+                    var unitController = hit.GetComponent<OldUnitController>();
 
                     if (unitController.unitParent != unitParent)
                     {
@@ -101,19 +112,19 @@ namespace BattleSystem
         public IEnumerator Move(Vector2 targetPosition)
         {
             ActionPoints--;
-            yield return StartCoroutine(unitMove.Move(targetPosition, _battleStates.WorldInfo.unitConfig.Movement.speed,
-                _battleStates.WorldInfo.unitConfig.Animation.walk));
+            yield return StartCoroutine(unitMove.Move(targetPosition, _combatInfo.WorldInfo.unitConfig.Movement.speed,
+                _combatInfo.WorldInfo.unitConfig.Animation.walk));
         }
         
-        public IEnumerator Attack(UnitController targetController)
+        public IEnumerator Attack(OldUnitController targetController)
         {
             ActionPoints = 0;
-            yield return StartCoroutine(unitAttack.Attack(targetController, _battleStates));
+            yield return StartCoroutine(unitAttack.Attack(targetController, _combatInfo));
         }
         
         public IEnumerator TakeHit(int damage)
         {
-            yield return StartCoroutine(unitTakeHit.TakeHit(_battleStates.WorldInfo.unitConfig, _deadAction, damage));
+            yield return StartCoroutine(unitTakeHit.TakeHit(_combatInfo.WorldInfo.unitConfig, _deadAction, damage));
         }
 
         public void Heal(int healCount)
@@ -123,37 +134,37 @@ namespace BattleSystem
 
         public void SetEffective(EffectData effectData, SpellConfig spellConfig)
         {
-            if (_battleStates.CurrentEffectData == null)
-                _battleStates.SetNewEffectData();
+            if (_combatInfo.CurrentEffectData == null)
+                _combatInfo.SetNewEffectData();
 
-            if (_battleStates.CurrentEffectData != null)
-                _battleStates.CurrentEffectData.SetNewEffect(effectData.EffectType, effectData.Turns, spellConfig);
+            if (_combatInfo.CurrentEffectData != null)
+                _combatInfo.CurrentEffectData.SetNewEffect(effectData.EffectType, effectData.Turns, spellConfig);
         }
 
         private IEnumerator ChooseEffectiveAction()
         {
-            if (_battleStates.CurrentEffectData.EffectType == EffectType.Cold)
+            if (_combatInfo.CurrentEffectData.EffectType == EffectType.Cold)
             {
                 ActionPoints--;
                 yield break;
             }
 
-            if (_battleStates.CurrentEffectData.EffectType == EffectType.Speed)
+            if (_combatInfo.CurrentEffectData.EffectType == EffectType.Speed)
             {
                 ActionPoints++;
                 yield break;
             }
 
-            if (_battleStates.CurrentEffectData.EffectType == EffectType.Fire)
+            if (_combatInfo.CurrentEffectData.EffectType == EffectType.Fire)
             {
-                yield return StartCoroutine(unitTakeHit.TakeHit(_battleStates.WorldInfo.unitConfig, _deadAction,
-                    _battleStates.CurrentEffectData.CurrentSpellData.SpellStats.spellDamage));
+                yield return StartCoroutine(unitTakeHit.TakeHit(_combatInfo.WorldInfo.unitConfig, _deadAction,
+                    _combatInfo.CurrentEffectData.CurrentSpellData.SpellStats.spellDamage));
             }
         }
         
         private void UnitIsDead()
         {
-            var delted = _deadFunc.Invoke(_battleStates.WorldInfo.unitConfig.UnitDefinition.unitName, unitParent);
+            var delted = _deadFunc.Invoke(_combatInfo.WorldInfo.unitConfig.UnitDefinition.unitName, unitParent);
             
             if (delted)
                 Destroy(gameObject);

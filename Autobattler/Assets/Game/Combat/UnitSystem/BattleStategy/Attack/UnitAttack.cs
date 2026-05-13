@@ -13,7 +13,7 @@ namespace BattleSystem.BattleStategy
         [Header("Settings")] 
         [SerializeField] protected float animationTime;
 
-        public abstract IEnumerator Attack(UnitController targetUnit, UnitBattleStates unitConfig);
+        public abstract IEnumerator Attack(OldUnitController targetOldUnit, UnitCombatInfo unitConfig);
 
         protected void SetSpriteSide(Vector2 targetVector)
         {

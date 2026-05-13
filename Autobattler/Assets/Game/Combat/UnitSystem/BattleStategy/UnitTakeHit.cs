@@ -27,16 +27,16 @@ namespace BattleSystem.BattleStategy
         private int _count;
         private int Count { get => _count; set { _count = value; UpdateHitPointText(); } }
         
-        private UnitBattleStates _unitBattleStates;
+        private UnitCombatInfo _unitCombatInfo;
 
-        public void InitializeUnitHitPoints(UnitBattleStates unitBattleStates, UnitParent unitParent)
+        public void InitializeUnitHitPoints(UnitCombatInfo unitCombatInfo, UnitParent unitParent)
         {
             if (unitParent == UnitParent.Enemy)
                 countBac.color = Color.red;
             
-            Count = unitBattleStates.Count;
-            var unitConfig = unitBattleStates.UnitConfig;
-            _unitBattleStates = unitBattleStates;
+            Count = unitCombatInfo.Count;
+            var unitConfig = unitCombatInfo.UnitConfig;
+            _unitCombatInfo = unitCombatInfo;
             
             _currentHitPoints = unitConfig.Stats.health * Count;
             _oneCountHitPoints = unitConfig.Stats.health;
@@ -56,7 +56,7 @@ namespace BattleSystem.BattleStategy
             
             Count = Mathf.CeilToInt((float)_currentHitPoints / _oneCountHitPoints);
 
-            _unitBattleStates.SetNewCount(Count);
+            _unitCombatInfo.SetNewCount(Count);
             
             if (Count <= 0)
             {
@@ -77,7 +77,7 @@ namespace BattleSystem.BattleStategy
 
             Count = _currentHitPoints <= _oneCountHitPoints ? 1 : Mathf.RoundToInt((float)_currentHitPoints / _oneCountHitPoints);
             
-            _unitBattleStates.SetNewCount(Count);
+            _unitCombatInfo.SetNewCount(Count);
             
             UpdateHitPointText();
         }

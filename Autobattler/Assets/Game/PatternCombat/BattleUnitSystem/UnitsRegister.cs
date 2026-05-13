@@ -1,27 +1,28 @@
 using System;
 using System.Collections.Generic;
 using BattleSystem;
+using Game.Core.BaseUnits;
+using Game.PatternCombat.Units;
 using UnityEngine;
 
 namespace Game.PatternCombat.BattleUnitSystem
 {
-    public class UnitsRegister : IRegisterUpdate
+    public class UnitsRegister : IRegisterUpdate, IUnitRegister
     {
-        private Dictionary<string, UnitController> _playerUnits = new();
-        private Dictionary<string, UnitController> _enemyUnits = new();
+        private Dictionary<string, BaseUnitController> _playerUnits = new();
+        private Dictionary<string, BaseUnitController> _enemyUnits = new();
 
         private Action _onRegisterUpdate;
         
-        public void AddUnit(UnitParent parent, UnitController unit)
+        public void AddUnit(UnitParent parent, BaseUnitController oldUnit)
         {
             var dictionary = parent == UnitParent.Player ? _playerUnits : _enemyUnits;
-            var unitInfo = unit.GetData().WorldInfo.unitConfig;
+            var unitInfo = oldUnit.GetUnitInfo().WorldInfo.unitConfig;
 
-            dictionary[unitInfo.UnitID] = unit;
+            dictionary[unitInfo.UnitID] = oldUnit;
             
             _onRegisterUpdate?.Invoke();
         }
-        
         public void RemoveUnit(UnitParent parent, string unitId)
         {
             var dictionary = parent == UnitParent.Player ? _playerUnits : _enemyUnits;
@@ -44,7 +45,7 @@ namespace Game.PatternCombat.BattleUnitSystem
             _onRegisterUpdate -= method;
         }
         
-        public Dictionary<string, UnitController> GetUnits(UnitParent parent)
+        public Dictionary<string, BaseUnitController> GetUnits(UnitParent parent)
         {
             var dictionary = parent == UnitParent.Player ? _playerUnits : _enemyUnits;
 
@@ -56,6 +57,13 @@ namespace Game.PatternCombat.BattleUnitSystem
     {
         public void SubscribeToUpdate(Action method);
         public void UnsubscribeFromUpdate(Action method);
-        public Dictionary<string, UnitController> GetUnits(UnitParent parent);
+        public Dictionary<string, BaseUnitController> GetUnits(UnitParent parent);
+    }
+
+    public interface IUnitRegister
+    {
+        public void AddUnit(UnitParent parent, BaseUnitController oldUnit);
+        public void RemoveUnit(UnitParent parent, string unitId);
+        public Dictionary<string, BaseUnitController> GetUnits(UnitParent parent);
     }
 }

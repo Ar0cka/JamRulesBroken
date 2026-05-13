@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BattleSystem;
 using BattleSystem.UnitSystem.data;
 using Game.Data.UnitConfigs;
+using Game.PatternCombat.Units;
 using Grid;
 using UnityEngine;
 using Zenject;
@@ -29,7 +30,7 @@ namespace Game.PatternCombat.BattleUnitSystem
         {
             var spawnPoint = parent == UnitParent.Player ? grid.GetRandomPlayerCell() : grid.GetRandomEnemyCell();
 
-            var unitStates = new UnitBattleStates(unitInfo);
+            var unitStates = new UnitCombatInfo(unitInfo);
             
             unitStates.SetPosition(spawnPoint.x, spawnPoint.y, grid.GetPosition(spawnPoint.y, spawnPoint.x));
 
@@ -40,7 +41,7 @@ namespace Game.PatternCombat.BattleUnitSystem
             var unitController = unitObject.GetComponent<UnitController>();
             unitController.InitializeUnit(unitStates, parent, grid);
 
-            if (unitController.unitParent == UnitParent.Enemy)
+            if (unitController.UnitParent == UnitParent.Enemy)
             {
                 unitController.GetComponent<SpriteRenderer>().flipX = true;
             }

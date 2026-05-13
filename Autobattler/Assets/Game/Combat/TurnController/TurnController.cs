@@ -30,10 +30,10 @@ namespace BattleSystem
 
         [SerializeField] private PlayerCastSystem playerCast;
 
-        private Dictionary<string, UnitController> _playerUnits = new();
-        private Dictionary<string, UnitController> _enemyUnits = new();
+        private Dictionary<string, OldUnitController> _playerUnits = new();
+        private Dictionary<string, OldUnitController> _enemyUnits = new();
         
-        private Queue<UnitController> _turnQueue = new();
+        private Queue<OldUnitController> _turnQueue = new();
         
         private Func<string, UnitParent, bool> _isUnitDead;
         private Action<SendToOutputData> _isOutputData;
@@ -47,7 +47,7 @@ namespace BattleSystem
         public bool IsTurn { get; private set; }
         private bool _isInitialized = false;
 
-        private UnitController _currentUnit;
+        private OldUnitController _currentOldUnit;
         private Coroutine _unitCoroutine;
         
         public void Initialize(SendToBattleData data, Action<SendToOutputData> outputDataEvent)
@@ -96,70 +96,70 @@ namespace BattleSystem
         {
             while (_turnQueue.Count > 0)
             {
-                _currentUnit = _turnQueue.Dequeue();
+                _currentOldUnit = _turnQueue.Dequeue();
                 
-                if (_currentUnit == null || !IsHaveInDictionary(_currentUnit.UnitName))
+                if (_currentOldUnit == null || !IsHaveInDictionary(_currentOldUnit.UnitName))
                 {
                     continue;
                 }
 
-                if (_currentUnit.GetData().UnitConfig.UnitDefinition.unitType == UnitType.Range)
+                if (_currentOldUnit.GetData().UnitConfig.UnitDefinition.unitType == UnitType.Range)
                 {
-                    var hit = Physics2D.OverlapCircleAll(_currentUnit.transform.position, overlapRadius);
+                    var hit = Physics2D.OverlapCircleAll(_currentOldUnit.transform.position, overlapRadius);
 #if UNITY_EDITOR
-                    overlapVector = _currentUnit.transform.position;
+                    overlapVector = _currentOldUnit.transform.position;
 #endif
 
-                    if (hit.Any(h => h.CompareTag("Unit") && h.GetComponent<UnitController>().unitParent != _currentUnit.unitParent))
+                    if (hit.Any(h => h.CompareTag("Unit") && h.GetComponent<OldUnitController>().unitParent != _currentOldUnit.unitParent))
                     {
-                        var freeSell = gridSystem.GetFreeCells(_currentUnit.GetData().X, _currentUnit.GetData().Y, 0.5f);
+                        var freeSell = gridSystem.GetFreeCells(_currentOldUnit.GetData().X, _currentOldUnit.GetData().Y, 0.5f);
                         
                         if (freeSell != null)
                         {
-                            if (_currentUnit == null || !IsHaveInDictionary(_currentUnit.UnitName)) 
+                            if (_currentOldUnit == null || !IsHaveInDictionary(_currentOldUnit.UnitName)) 
                                 continue;
                             
                             var targetVector = new Vector2(freeSell.WorldX, freeSell.WorldY);
                             
-                            yield return _currentUnit.Move(targetVector);
-                            _currentUnit.SetUnitPosition(freeSell.X, freeSell.Y, targetVector);
+                            yield return _currentOldUnit.Move(targetVector);
+                            _currentOldUnit.SetUnitPosition(freeSell.X, freeSell.Y, targetVector);
                         }
                         
-                        var hitFirst = hit.FirstOrDefault(x => x.CompareTag("Unit") && x.GetComponent<UnitController>().unitParent != _currentUnit.unitParent);
+                        var hitFirst = hit.FirstOrDefault(x => x.CompareTag("Unit") && x.GetComponent<OldUnitController>().unitParent != _currentOldUnit.unitParent);
                         
                         if (hitFirst != null)
                         {
-                            if (_currentUnit == null || !IsHaveInDictionary(_currentUnit.UnitName)) 
+                            if (_currentOldUnit == null || !IsHaveInDictionary(_currentOldUnit.UnitName)) 
                                 continue;
                             
-                            var unitControllerUnitRange = hitFirst.GetComponent<UnitController>();
-                            yield return StartCoroutine(_currentUnit.Attack(unitControllerUnitRange));
+                            var unitControllerUnitRange = hitFirst.GetComponent<OldUnitController>();
+                            yield return StartCoroutine(_currentOldUnit.Attack(unitControllerUnitRange));
                             continue;
                         }
                     }
-                    if (_currentUnit == null || !IsHaveInDictionary(_currentUnit.UnitName))
+                    if (_currentOldUnit == null || !IsHaveInDictionary(_currentOldUnit.UnitName))
                         continue;
                     
-                    var unitTarget = GetRandomEnemyUnit(_currentUnit);
-                    yield return StartCoroutine(_currentUnit.Attack(unitTarget));
+                    var unitTarget = GetRandomEnemyUnit(_currentOldUnit);
+                    yield return StartCoroutine(_currentOldUnit.Attack(unitTarget));
                     yield return new WaitForSeconds(0.5f);
                     continue;
                 }
                 
-                var targetUnit = FindTarget(_currentUnit.unitParent, _currentUnit.transform);
+                var targetUnit = FindTarget(_currentOldUnit.unitParent, _currentOldUnit.transform);
 
                 var data = targetUnit.GetData();
                 
-                var path = pathfinder.CalculatePath(_currentUnit.GetData().X, _currentUnit.GetData().Y, data.X, data.Y);
+                var path = pathfinder.CalculatePath(_currentOldUnit.GetData().X, _currentOldUnit.GetData().Y, data.X, data.Y);
 
-                yield return _currentUnit.UnitTurnActions(path);
+                yield return _currentOldUnit.UnitTurnActions(path);
                 yield return new WaitForSeconds(0.5f);
             }
             
             CreateNextTurn();
         }
 
-        private UnitController FindTarget(UnitParent currentUnitType, Transform currentPos)
+        private OldUnitController FindTarget(UnitParent currentUnitType, Transform currentPos)
         {
             var hit = Physics2D.OverlapAreaAll(currentPos.position,
                 currentPos.position + new Vector3(overlapRadius, overlapRadius, 0));
@@ -169,7 +169,7 @@ namespace BattleSystem
                 if (!target.CompareTag("Unit"))
                     continue;
                 
-                var unitController = target.GetComponent<UnitController>();
+                var unitController = target.GetComponent<OldUnitController>();
                 
                 if (unitController.unitParent == currentUnitType) continue;
 
@@ -192,9 +192,9 @@ namespace BattleSystem
             return _playerUnits.ContainsKey(unitName) || _enemyUnits.ContainsKey(unitName);
         }
 
-        private UnitController GetRandomEnemyUnit(UnitController currentUnit)
+        private OldUnitController GetRandomEnemyUnit(OldUnitController currentOldUnit)
         {
-            switch (currentUnit.unitParent)
+            switch (currentOldUnit.unitParent)
             {
                 case UnitParent.Player:
                     return _enemyUnits.Values.ElementAt(Random.Range(0, _enemyUnits.Count));
@@ -203,7 +203,7 @@ namespace BattleSystem
             }
         }
         
-        private void CreateUnit(UnitParent parent, UnitBattleStates unit)
+        private void CreateUnit(UnitParent parent, UnitCombatInfo unit)
         {
            
         }
@@ -220,7 +220,7 @@ namespace BattleSystem
         }
         private void SortedTurnQueue()
         {
-            var list = new List<UnitController>();
+            var list = new List<OldUnitController>();
             
             list.AddRange(_playerUnits.Values);
             list.AddRange(_enemyUnits.Values);

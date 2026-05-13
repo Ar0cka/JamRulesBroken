@@ -10,7 +10,7 @@ namespace BattleSystem
         [SerializeField] private Animator spellAnimator;
         [SerializeField] private float distance;
         
-        public IEnumerator Action(UnitController unit, SpellConfig spellConfig, Vector2 targetPosition)
+        public IEnumerator Action(OldUnitController oldUnit, SpellConfig spellConfig, Vector2 targetPosition)
         {
             var animationConfig = spellConfig.SpellAnimations;
             
@@ -22,21 +22,21 @@ namespace BattleSystem
             
             if (spellConfig.SpellData.spellType == SpellType.Damage)
             {
-                StartCoroutine(unit.TakeHit(spellConfig.SpellStats.spellDamage));
+                StartCoroutine(oldUnit.TakeHit(spellConfig.SpellStats.spellDamage));
                 Destroy(gameObject);
                 yield break;
             }
             
             if (spellConfig.SpellData.spellType == SpellType.Heal)
             {
-                unit.Heal(spellConfig.SpellStats.spellDamage);
+                oldUnit.Heal(spellConfig.SpellStats.spellDamage);
                 Destroy(gameObject);
                 yield break;
             }
 
             if (spellConfig.SpellData.spellType == SpellType.Effective)
             {
-                unit.SetEffective(spellConfig.EffectData, spellConfig);
+                oldUnit.SetEffective(spellConfig.EffectData, spellConfig);
                 Destroy(gameObject);
                 yield break;
             }

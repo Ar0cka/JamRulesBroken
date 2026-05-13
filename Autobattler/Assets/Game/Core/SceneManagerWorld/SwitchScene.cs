@@ -88,21 +88,21 @@ namespace Game.Core.SceneManagerWorld
         {
             var playerUnits = playerUnitContainer.PlayerUnits.Values.ToList();
 
-            List<UnitBattleStates> unitData = new();
+            List<UnitCombatInfo> unitData = new();
 
             grid.transform.position = savePos;
             foreach (var playerUnit in playerUnits)
             {
-                unitData.Add(new UnitBattleStates(playerUnit.unitConfig, playerUnit.unitCount));
+                unitData.Add(new UnitCombatInfo(playerUnit.unitConfig, playerUnit.unitCount));
             }
 
             var playerSpells = playerSpellContainer.SpellDictionary.Values.ToList();
 
-            List<UnitBattleStates> unitDataEnemy = new();
+            List<UnitCombatInfo> unitDataEnemy = new();
 
             foreach (var enemyUnit in _enemyConfig.EnemyBattle)
             {
-                unitDataEnemy.Add(new UnitBattleStates(enemyUnit.units, enemyUnit.count));
+                unitDataEnemy.Add(new UnitCombatInfo(enemyUnit.units, enemyUnit.count));
             }
 
             return new SendToBattleData(unitData, unitDataEnemy, playerSpells);

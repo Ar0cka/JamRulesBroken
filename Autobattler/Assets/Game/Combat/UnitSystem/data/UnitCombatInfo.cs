@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace BattleSystem.UnitSystem.data
 {
-    public class UnitBattleStates
+    public class UnitCombatInfo
     {
-        public UnitBattleStates(UnitWorldInfo worldInfo)
+        public UnitCombatInfo(UnitWorldInfo worldInfo)
         {
             WorldInfo = worldInfo;
             CurrentEffectData = new EffectUnitData();

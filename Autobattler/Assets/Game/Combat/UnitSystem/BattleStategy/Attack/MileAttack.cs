@@ -6,17 +6,17 @@ namespace BattleSystem.BattleStategy
 {
     public class MileAttack : UnitAttack
     {
-        public override IEnumerator Attack(UnitController targetUnit, UnitBattleStates unitBattleStates)
+        public override IEnumerator Attack(OldUnitController targetOldUnit, UnitCombatInfo unitCombatInfo)
         {
-            SetSpriteSide(targetUnit.transform.position);
+            SetSpriteSide(targetOldUnit.transform.position);
             
-            var unitConfig = unitBattleStates.UnitConfig;
+            var unitConfig = unitCombatInfo.UnitConfig;
 
             animator.SetTrigger(unitConfig.Animation.attack);
 
             yield return new WaitForSeconds(animationTime);
 
-            yield return StartCoroutine(targetUnit.TakeHit(unitConfig.Stats.attack * unitBattleStates.Count));
+            yield return StartCoroutine(targetOldUnit.TakeHit(unitConfig.Stats.attack * unitCombatInfo.Count));
 
             yield return new WaitForSeconds(0.5f);
         }

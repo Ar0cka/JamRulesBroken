@@ -1,20 +1,61 @@
 using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using BattleSystem;
+using Cysharp.Threading.Tasks;
+using Game.Core.BaseTurnController;
 using Game.PatternCombat.TrunControllers.TurnVariants;
 using UnityEngine;
+using Zenject;
 
 namespace Game.PatternCombat.TrunControllers
 {
     public class TurnManager : MonoBehaviour
     {
-        [SerializeField] private ManualTurnController manualController;
+        [Inject] private TurnFactory _turnFactory;
         
-        private TurnControllerType _currentTurnController;
-        public Action<TurnControllerType> OnTypeChange; //TODO Add UI Class with subscribe to this event
+        private Dictionary<TurnControllerType, BaseTurnController> _turnControllers = new();
+        
+        private TurnControllerType _currentControllerType;
+        private BaseTurnController _currentController;
 
+        public void InitializeTurnManager(ref Action<TurnControllerType> onChangeType, ref Action endTurn)
+        {
+            onChangeType += ChangedControllerType;
+            _currentControllerType = TurnControllerType.Manual;
+
+            _turnControllers[TurnControllerType.Manual] = 
+                _turnFactory.CreateTurnController<ManualTurnController>();
+            
+            _currentController = _turnControllers[_currentControllerType];
+
+            endTurn += () =>
+            {
+                _currentController.PlayerTurnIsEnd();
+                
+                ControlTurn().Forget(ex =>
+                {
+                    Debug.Log(ex.Message);
+                });
+            };
+        }
+        
         private void ChangedControllerType(TurnControllerType type)
         {
-            _currentTurnController = type;
+            _currentControllerType = type;
+
+            if (_turnControllers.TryGetValue(type, out var value))
+            {
+                _currentController = value;
+            }
+        }
+
+        private async UniTask ControlTurn()
+        {
+            while (_currentController.IsTurnActive())
+            {
+                await _currentController.Turn();
+            }
         }
     }
 

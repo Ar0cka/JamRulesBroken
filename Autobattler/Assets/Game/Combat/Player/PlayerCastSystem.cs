@@ -46,7 +46,7 @@ namespace BattleSystem
                     return;
                 }
                 
-                var unitController = unit.collider.GetComponent<UnitController>();
+                var unitController = unit.collider.GetComponent<OldUnitController>();
 
                 if (unitController is not null)
                 {
@@ -65,15 +65,15 @@ namespace BattleSystem
             _playerSpellList = spellConfigs.ToDictionary(x => x.SpellData.spellName, x => x);
         }
         
-        private IEnumerator CastSpell(string spellName, UnitController unitController)
+        private IEnumerator CastSpell(string spellName, OldUnitController oldUnitController)
         {
             if (_playerSpellList.TryGetValue(spellName, out var value))
             {
                 var spellObject = Instantiate(value.SpellVisualData.spellObject);
                 spellObject.transform.position = new Vector3(spellPosition.position.x, spellPosition.position.y, 0);
 
-                Debug.Log($"Hit unit: {unitController.name} and him position = {unitController.GetData().CurrentWorldPosition}");
-                yield return StartCoroutine(spellObject.GetComponent<SpellProjectail>().Action(unitController, value, unitController.GetData().CurrentWorldPosition));
+                Debug.Log($"Hit unit: {oldUnitController.name} and him position = {oldUnitController.GetData().CurrentWorldPosition}");
+                yield return StartCoroutine(spellObject.GetComponent<SpellProjectail>().Action(oldUnitController, value, oldUnitController.GetData().CurrentWorldPosition));
 
                 _chooseSpell = "";
                 spellNameBox.gameObject.SetActive(false);

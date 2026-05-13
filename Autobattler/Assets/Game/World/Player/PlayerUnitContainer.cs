@@ -48,7 +48,7 @@ namespace Game.World.Player
             _playerUnits.Add(unitWorldInfo.unitConfig.UnitID, unitWorldInfo);
             UpdateImages();
         }
-        public void RebuildUnitsAfterFight(List<UnitBattleStates> unitData)
+        public void RebuildUnitsAfterFight(List<UnitCombatInfo> unitData)
         {
             _playerUnits.Clear();
 
