@@ -56,7 +56,7 @@ namespace Game.Core.BaseTurnController
 
         protected List<BaseUnitController> GetAllUnits()
         {
-            List<UnitController> units = new();
+            List<BaseUnitController> units = new();
             units.AddRange(Units.GetUnits(UnitParent.Player).Values);
             units.AddRange(Units.GetUnits(UnitParent.Enemy).Values);
 
