@@ -19,7 +19,7 @@ namespace Game.PatternCombat.Units
             return unit;
         }
 
-        public override UniTask Action(IPathService pathService)
+        public override UniTask Action(IPathService pathService, BaseUnitController targetUnit)
         {
             throw new System.NotImplementedException();
         }

@@ -1,11 +1,8 @@
 using System.Collections.Generic;
-using BattleSystem;
 using Cysharp.Threading.Tasks;
 using Game.Core.BaseUnits;
 using Game.PatternCombat.BattleUnitSystem;
 using Game.PatternCombat.TrunControllers;
-using Game.PatternCombat.Units;
-using UnityEngine;
 using Zenject;
 
 namespace Game.Core.BaseTurnController
@@ -34,8 +31,8 @@ namespace Game.Core.BaseTurnController
             
             var units = GetAllUnits();
 
-            units.Sort((a, b) => b.GetUnitInfo().WorldInfo.unitConfig.Stats.initiative
-                .CompareTo(a.GetUnitInfo().WorldInfo.unitConfig.Stats.initiative));
+            units.Sort((a, b) => b.GetUnitInfo().UnitInfo.unitConfig.Stats.initiative
+                .CompareTo(a.GetUnitInfo().UnitInfo.unitConfig.Stats.initiative));
             
             foreach (var unit in units)
             {

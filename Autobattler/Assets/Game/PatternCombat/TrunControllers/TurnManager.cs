@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using BattleSystem;
 using Cysharp.Threading.Tasks;
 using Game.Core.BaseTurnController;
+using Game.PatternCombat.BattleUnitSystem;
 using Game.PatternCombat.TrunControllers.TurnVariants;
 using UnityEngine;
 using Zenject;
@@ -13,6 +12,7 @@ namespace Game.PatternCombat.TrunControllers
     public class TurnManager : MonoBehaviour
     {
         [Inject] private TurnFactory _turnFactory;
+        [Inject] private IUnitRegister _unitRegister;
         
         private Dictionary<TurnControllerType, BaseTurnController> _turnControllers = new();
         
@@ -54,7 +54,7 @@ namespace Game.PatternCombat.TrunControllers
         {
             while (_currentController.IsTurnActive())
             {
-                await _currentController.Turn();
+                await _currentController.Turn(_unitRegister);
             }
         }
     }

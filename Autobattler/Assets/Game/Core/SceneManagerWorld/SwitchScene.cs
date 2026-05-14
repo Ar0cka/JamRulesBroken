@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BattleSystem;
-using BattleSystem.UnitSystem;
-using BattleSystem.UnitSystem.data;
-using Game.Combat.UnitSystem.data;
+using Game.Core.SceneManagerWorld.SendData;
 using Game.Data.WorldSceneConfigs;
+using Game.PatternCombat;
 using Game.World.MoneySystem;
 using Game.World.Player;
 using UnityEngine;
@@ -88,24 +86,9 @@ namespace Game.Core.SceneManagerWorld
         {
             var playerUnits = playerUnitContainer.PlayerUnits.Values.ToList();
 
-            List<UnitCombatInfo> unitData = new();
-
-            grid.transform.position = savePos;
-            foreach (var playerUnit in playerUnits)
-            {
-                unitData.Add(new UnitCombatInfo(playerUnit.unitConfig, playerUnit.unitCount));
-            }
-
             var playerSpells = playerSpellContainer.SpellDictionary.Values.ToList();
 
-            List<UnitCombatInfo> unitDataEnemy = new();
-
-            foreach (var enemyUnit in _enemyConfig.EnemyBattle)
-            {
-                unitDataEnemy.Add(new UnitCombatInfo(enemyUnit.units, enemyUnit.count));
-            }
-
-            return new SendToBattleData(unitData, unitDataEnemy, playerSpells);
+            return new SendToBattleData(playerUnits, _enemyConfig.EnemyBattle, playerSpells);
         }
 
         public int GetMoney()
@@ -115,7 +98,7 @@ namespace Game.Core.SceneManagerWorld
 
         public void TakeOutputData(SendToOutputData outputData)
         {
-            if (outputData.resultFight == FightResult.Lose)
+            if (outputData.fightResult == FightResult.Lose)
             {
                 SceneManager.UnloadSceneAsync(_scene);
                 SceneManager.LoadScene(mainScene);

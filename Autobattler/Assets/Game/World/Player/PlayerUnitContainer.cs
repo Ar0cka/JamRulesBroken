@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using BattleSystem.UnitSystem.data;
-using Game.Data;
 using Game.Data.Player;
 using Game.Data.UnitConfigs;
 using Game.World.Player.Interfaces;
@@ -48,17 +45,16 @@ namespace Game.World.Player
             _playerUnits.Add(unitWorldInfo.unitConfig.UnitID, unitWorldInfo);
             UpdateImages();
         }
-        public void RebuildUnitsAfterFight(List<UnitCombatInfo> unitData)
+        public void RebuildUnitsAfterFight(List<UnitWorldInfo> unitData)
         {
             _playerUnits.Clear();
 
             foreach (var data in unitData)
             {
-                _playerUnits.Add(data.UnitConfig.UnitID, new UnitWorldInfo
+                if (!_playerUnits.TryAdd(data.unitConfig.UnitID, data))
                 {
-                    unitConfig = data.UnitConfig,
-                    unitCount = data.Count
-                });
+                    Debug.Log("Already exist");
+                }
             }
             
             UpdateImages();

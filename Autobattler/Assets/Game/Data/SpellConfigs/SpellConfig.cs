@@ -1,5 +1,4 @@
 using System;
-using BattleSystem.UnitSystem.data;
 using UnityEngine;
 
 namespace Game.Data.SpellConfigs
@@ -13,7 +12,7 @@ namespace Game.Data.SpellConfigs
         [field:SerializeField] public SpellEffectData SpellSpellEffect { get; private set; }
         [field:SerializeField] public SpellVisualData SpellVisualData { get; private set; }
         [field:SerializeField] public SpellAnimations SpellAnimations { get; private set; }
-        [field:SerializeField] public EffectData EffectData { get; private set; }
+        [field:SerializeField] public EffectInfo EffectInfo { get; private set; }
     }
 
     [Serializable]

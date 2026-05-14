@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using BattleSystem;
 using Game.Core.BaseUnits;
-using Game.PatternCombat.Units;
 using UnityEngine;
 
 namespace Game.PatternCombat.BattleUnitSystem
@@ -17,7 +15,7 @@ namespace Game.PatternCombat.BattleUnitSystem
         public void AddUnit(UnitParent parent, BaseUnitController oldUnit)
         {
             var dictionary = parent == UnitParent.Player ? _playerUnits : _enemyUnits;
-            var unitInfo = oldUnit.GetUnitInfo().WorldInfo.unitConfig;
+            var unitInfo = oldUnit.GetUnitInfo().UnitInfo.unitConfig;
 
             dictionary[unitInfo.UnitID] = oldUnit;
             

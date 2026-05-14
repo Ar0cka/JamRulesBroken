@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Game.Core.BaseTurnController;
 using Game.PatternCombat.BattleUnitSystem;
@@ -21,7 +22,10 @@ namespace Game.PatternCombat.TrunControllers.TurnVariants
             IsTurn = true;
 
             var unitController = UnitsQueue.Dequeue();
-            var target = unitController.ChooseTarget()
+            var enemyList = register.GetUnits(unitController.GetEnemyType());
+            var target = unitController.ChooseTarget(enemyList.Values.ToList());
+            
+            await unitController.Action(PathService, target);
 
             IsPlayerTurn = true;
             

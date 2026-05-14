@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BattleSystem;
-using BattleSystem.UnitSystem.data;
 using Cysharp.Threading.Tasks;
-using Game.Combat.Grid;
+using Game.PatternCombat.BattleUnitSystem;
 using Game.PatternCombat.TrunControllers;
-using Game.PatternCombat.Units;
 using Grid;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Game.Core.BaseUnits
@@ -27,15 +23,15 @@ namespace Game.Core.BaseUnits
             
             IsValidComponents();
             
-            UnitInfo.SetPosition(gridData.X, gridData.Y, new Vector2(gridData.WorldX, gridData.WorldY));
+            UnitInfo.SetPosition(gridData);
         }
 
         public abstract BaseUnitController ChooseTarget(List<BaseUnitController> enemyUnits);
-        public abstract UniTask Action(IPathService pathService);
+        public abstract UniTask Action(IPathService pathService, BaseUnitController targetUnit);
 
         protected virtual BaseUnitController CheckUnitRadius()
         {
-            var unitConfig = UnitInfo.WorldInfo.unitConfig;
+            var unitConfig = UnitInfo.UnitInfo.unitConfig;
             
             var aroundList =
                 Physics2D.OverlapCircleAll(rb2D.position, unitConfig.UnitChecker.aroundUnit, unitConfig.UnitChecker.targetLayer).ToList();
@@ -58,10 +54,10 @@ namespace Game.Core.BaseUnits
         }
         protected virtual BaseUnitController ChoosePriorityType(List<BaseUnitController> units)
         {
-            var unitPriorityConfig = UnitInfo.WorldInfo.unitConfig.PrioritySettings;
+            var unitPriorityConfig = UnitInfo.UnitInfo.unitConfig.PrioritySettings;
 
             var filteredUnits = units.Where(e =>
-                unitPriorityConfig.priorityType.Contains(e.UnitInfo.WorldInfo.unitConfig.UnitDefinition.unitType));
+                unitPriorityConfig.priorityType.Contains(e.UnitInfo.UnitInfo.unitConfig.UnitDefinition.unitType));
 
             var unit = filteredUnits.FirstOrDefault();
 
@@ -114,5 +110,12 @@ namespace Game.Core.BaseUnits
         }
 
         public UnitCombatInfo GetUnitInfo() => UnitInfo;
+
+        public UnitParent GetEnemyType()
+        {
+            return Parent == UnitParent.Player ? UnitParent.Enemy : UnitParent.Player;
+        }
+
+        public UnitParent GetParentType() => Parent;
     }
 }
