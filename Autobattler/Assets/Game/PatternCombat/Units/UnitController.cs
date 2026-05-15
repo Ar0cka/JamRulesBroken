@@ -19,9 +19,34 @@ namespace Game.PatternCombat.Units
             return unit;
         }
 
-        public override UniTask Action(IPathService pathService, BaseUnitController targetUnit)
+        public override async UniTask Action(IPathService pathService, BaseUnitController targetUnit)
         {
-            throw new System.NotImplementedException();
+            var enemyPosition = targetUnit.GetUnitInfo().UnitPosition;
+            var currentPosition = GetUnitInfo().UnitPosition;
+
+            var pathToUnit =
+                pathService.FindPath(currentPosition.X, currentPosition.Y, enemyPosition.X, enemyPosition.Y);
+
+            ActionPoints = GetUnitInfo().UnitInfo.unitConfig.Stats.actionPoints;
+            
+            foreach (var path in pathToUnit)
+            {
+                if (ActionPoints <= 0)
+                    break;
+                
+                if (GridQuery.IsAdjacent8(path, GetUnitInfo().UnitPosition))
+                {
+                    ActionPoints = 0;
+                    break;
+                }
+                
+                //TODO Unit Move
+                //TODO Unit decreasing action point
+                //TODO next iteration
+                //TODO Check around units and leave if having other units with low path (Только 1 раз)
+            }
         }
+        
+        
     }
 }

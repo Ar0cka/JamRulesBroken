@@ -10,26 +10,40 @@ namespace Game.PatternCombat.TrunControllers.TurnVariants
     {
         private Action _onUnitTurn;
         
-        public override void InitializeTurnController()
+        public override void InitializeTurnController(IUnitRegister unitRegister, IPathService pathService)
         {
             IsPlayerTurn = true;
+
+            UnitsRegister = unitRegister;
+            PathService = pathService;
         }
-        public override async UniTask Turn(IUnitRegister register)
+        public override async UniTask Turn()
         {
-            if (IsPlayerTurn || UnitsQueue.Count == 0 || IsTurn)
+            if (IsTurn || IsPlayerTurn)
                 return;
-            
+
             IsTurn = true;
-
-            var unitController = UnitsQueue.Dequeue();
-            var enemyList = register.GetUnits(unitController.GetEnemyType());
-            var target = unitController.ChooseTarget(enemyList.Values.ToList());
             
-            await unitController.Action(PathService, target);
-
-            IsPlayerTurn = true;
+            if (UnitsQueue.Count <= 0)
+                CreateTurn();
             
-            IsTurn = false;
+            while (UnitsQueue.Count > 0)
+            {
+                var unitController = UnitsQueue.Dequeue();
+
+                if (unitController.GetParentType() == UnitParent.Player)
+                    await AwaitPlayerTurn();
+
+                if (IsPlayerTurn)
+                    return;
+
+                var enemyType = unitController.GetParentType() == UnitParent.Player
+                    ? UnitParent.Enemy
+                    : UnitParent.Player;
+                
+                var targetUnit = unitController.ChooseTarget(UnitsRegister.GetUnits(enemyType).Values.ToList());
+                await unitController.Action(PathService, targetUnit);
+            }
         }
     }
 }

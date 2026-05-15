@@ -50,7 +50,7 @@ namespace Game.Data.UnitConfigs
         public int health;
         public int attack;
         public int defense;
-        public int cellsInTurn;
+        public int actionPoints;
         public int initiative;
     }
 

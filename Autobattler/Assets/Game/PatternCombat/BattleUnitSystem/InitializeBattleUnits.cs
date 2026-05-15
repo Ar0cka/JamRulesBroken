@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Data.UnitConfigs;
+using Game.PatternCombat.Grid.Services;
 using Game.PatternCombat.Units;
 using Grid;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace Game.PatternCombat.BattleUnitSystem
         [SerializeField] private GridSystem grid;
         
         [Inject] private UnitsRegister _register;
+        [Inject] private GridQuery _gridQuery;
         
         public void CreateArmy(UnitParent parent, List<UnitWorldInfo> units)
         {
@@ -35,7 +37,7 @@ namespace Game.PatternCombat.BattleUnitSystem
             unitObject.name = $"{unitObject.name}:{parent}";
             
             var unitController = unitObject.GetComponent<UnitController>();
-            unitController.InitializeUnit(unitStates, parent, grid.GridData[spawnPoint.x, spawnPoint.y]);
+            unitController.InitializeUnit(unitStates, parent, grid.GridData[spawnPoint.x, spawnPoint.y], _gridQuery);
 
             if (unitController.GetParentType() == UnitParent.Enemy)
             {

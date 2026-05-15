@@ -7,24 +7,28 @@ using Zenject;
 
 namespace Game.Core.BaseTurnController
 {
-    public abstract class BaseTurnController : ITurnUI
+    public abstract class BaseTurnController : ITurnController
     {
-        [Inject] protected PathService PathService;
-        [Inject] protected UnitsRegister Units;
-        
         protected Queue<BaseUnitController> UnitsQueue = new();
-
-        public int CurrentTurn => TurnCount;
+        
         protected int TurnCount = 0;
-
         protected bool IsTurn = false;
         protected bool IsPlayerTurn = false;
+
+        protected IUnitRegister UnitsRegister;
+        protected IPathService PathService;
         
 
-        public abstract void InitializeTurnController();
+        public abstract void InitializeTurnController(IUnitRegister unitRegister, IPathService pathService);
 
-        public abstract UniTask Turn(IUnitRegister register);
-
+        public abstract UniTask Turn();
+        public async UniTask AwaitPlayerTurn()
+        {
+            IsPlayerTurn = true;
+            IsTurn = false;
+            
+            await UniTask.WaitUntil(() => !IsPlayerTurn && IsTurn);
+        }
         public virtual void CreateTurn()
         {
             UnitsQueue.Clear();
@@ -44,25 +48,33 @@ namespace Game.Core.BaseTurnController
             IsPlayerTurn = true;
             IsTurn = false;
         }
-
-        public int UnitsCount() => UnitsQueue.Count;
-        public bool IsTurnActive() => IsTurn;
-
-        public void PlayerTurnIsEnd() => IsPlayerTurn = false;
         
+        public bool IsTurnActive() => IsTurn;
+        public int GetCurrentTurn() => TurnCount;
+        public void PlayerTurnIsEnd()
+        {
+            IsPlayerTurn = false;
+            IsTurn = true;
+        }
 
         protected List<BaseUnitController> GetAllUnits()
         {
             List<BaseUnitController> units = new();
-            units.AddRange(Units.GetUnits(UnitParent.Player).Values);
-            units.AddRange(Units.GetUnits(UnitParent.Enemy).Values);
+            units.AddRange(UnitsRegister.GetUnits(UnitParent.Player).Values);
+            units.AddRange(UnitsRegister.GetUnits(UnitParent.Enemy).Values);
 
             return units;
         }
     }
 
-    public interface ITurnUI
+    public interface ITurnController
     {
-        public int CurrentTurn { get;}
+        public void InitializeTurnController(IUnitRegister unitRegister, IPathService pathService);
+        public UniTask AwaitPlayerTurn();
+        public UniTask Turn();
+        
+        public void PlayerTurnIsEnd();
+        public bool IsTurnActive();
+        public int GetCurrentTurn();
     }
 }

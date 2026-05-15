@@ -13,11 +13,12 @@ namespace Game.PatternCombat.TrunControllers
     {
         [Inject] private TurnFactory _turnFactory;
         [Inject] private IUnitRegister _unitRegister;
+        [Inject] private IPathService _pathService;
         
-        private Dictionary<TurnControllerType, BaseTurnController> _turnControllers = new();
+        private Dictionary<TurnControllerType, ITurnController> _turnControllers = new();
         
         private TurnControllerType _currentControllerType;
-        private BaseTurnController _currentController;
+        private ITurnController _currentController;
 
         public void InitializeTurnManager(ref Action<TurnControllerType> onChangeType, ref Action endTurn)
         {
@@ -25,7 +26,7 @@ namespace Game.PatternCombat.TrunControllers
             _currentControllerType = TurnControllerType.Manual;
 
             _turnControllers[TurnControllerType.Manual] = 
-                _turnFactory.CreateTurnController<ManualTurnController>();
+                _turnFactory.CreateTurnController<ManualTurnController>(_unitRegister, _pathService);
             
             _currentController = _turnControllers[_currentControllerType];
 
@@ -33,9 +34,9 @@ namespace Game.PatternCombat.TrunControllers
             {
                 _currentController.PlayerTurnIsEnd();
                 
-                ControlTurn().Forget(ex =>
+                _currentController.AwaitPlayerTurn().Forget(e =>
                 {
-                    Debug.Log(ex.Message);
+                    Debug.Log(e.Message);
                 });
             };
         }
@@ -47,14 +48,6 @@ namespace Game.PatternCombat.TrunControllers
             if (_turnControllers.TryGetValue(type, out var value))
             {
                 _currentController = value;
-            }
-        }
-
-        private async UniTask ControlTurn()
-        {
-            while (_currentController.IsTurnActive())
-            {
-                await _currentController.Turn(_unitRegister);
             }
         }
     }

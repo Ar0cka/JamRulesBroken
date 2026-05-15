@@ -3,23 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Game.PatternCombat.BattleUnitSystem;
+using Game.PatternCombat.Grid.Services;
 using Game.PatternCombat.TrunControllers;
 using Grid;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Core.BaseUnits
 {
     public abstract class BaseUnitController : MonoBehaviour
     {
         [SerializeField] protected Rigidbody2D rb2D;
+
+        [Header("Unit components")] 
+        [SerializeField] protected BaseUnitMovement move;
+        
+        protected GridQuery GridQuery;
         
         protected UnitCombatInfo UnitInfo;
         protected UnitParent Parent;
 
-        public virtual void InitializeUnit(UnitCombatInfo info, UnitParent parent, GridData gridData)
+        protected int ActionPoints = 0;
+
+        public virtual void InitializeUnit(UnitCombatInfo info, UnitParent parent, GridData gridData, GridQuery gridQuery)
         {
             UnitInfo = info;
             Parent = parent;
+            GridQuery = gridQuery;
             
             IsValidComponents();
             
@@ -28,6 +38,14 @@ namespace Game.Core.BaseUnits
 
         public abstract BaseUnitController ChooseTarget(List<BaseUnitController> enemyUnits);
         public abstract UniTask Action(IPathService pathService, BaseUnitController targetUnit);
+
+        protected virtual async UniTask UnitMove(GridData targetData)
+        {
+            await move.MoveAsync(targetData, GetUnitInfo().UnitInfo.unitConfig.Movement);
+
+            ActionPoints--;
+            UnitInfo.SetPosition(targetData);
+        }
 
         protected virtual BaseUnitController CheckUnitRadius()
         {
@@ -52,6 +70,7 @@ namespace Game.Core.BaseUnits
 
             return unit;
         }
+        
         protected virtual BaseUnitController ChoosePriorityType(List<BaseUnitController> units)
         {
             var unitPriorityConfig = UnitInfo.UnitInfo.unitConfig.PrioritySettings;
@@ -101,8 +120,8 @@ namespace Game.Core.BaseUnits
             }
             
             unitsPosition.Add(unitController);
-        } 
-
+        }
+        
         protected void IsValidComponents()
         {
             if (rb2D is null)

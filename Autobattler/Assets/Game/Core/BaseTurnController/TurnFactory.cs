@@ -1,12 +1,15 @@
+using Game.PatternCombat.BattleUnitSystem;
+using Game.PatternCombat.TrunControllers;
+
 namespace Game.Core.BaseTurnController
 {
     public class TurnFactory
     {
-        public BaseTurnController CreateTurnController<TType>() where TType : BaseTurnController, new()
+        public ITurnController CreateTurnController<TType>(IUnitRegister unitRegister, IPathService pathService) where TType : ITurnController, new()
         {
             var turnController = new TType();
             
-            turnController.InitializeTurnController();
+            turnController.InitializeTurnController(unitRegister, pathService);
 
             return turnController;
         }
