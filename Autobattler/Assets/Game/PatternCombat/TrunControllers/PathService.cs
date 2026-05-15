@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using DefaultNamespace.Pathfiender;
-using Game.Combat.Grid;
+using Game.PatternCombat.Grid.Interfaces;
 using Grid;
 using UnityEngine;
 

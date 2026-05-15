@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BattleSystem;
-using Game.Combat.UnitSystem.data;
+using Game.Core.SceneManagerWorld.SendData;
 using Game.Data.UnitConfigs;
 using Game.PatternCombat.BattleUnitSystem;
 
@@ -29,12 +28,12 @@ namespace Game.PatternCombat.CombatEndSystem
                 return;
 
             FightResult result = playerUnits.Count > 0 ? FightResult.Win : FightResult.Lose;
-            List<UnitWorldInfo> unitList = playerUnits.Values.Select(e => e.GetData().WorldInfo).ToList();
+            List<UnitWorldInfo> unitList = playerUnits.Values.Select(e => e.GetUnitInfo().UnitInfo).ToList();
 
             var outputData = new SendToOutputData
             {
                 playerUnits = unitList,
-                resultFight = result
+                fightResult = result
             };
             
             OnEndCombat?.Invoke(outputData);

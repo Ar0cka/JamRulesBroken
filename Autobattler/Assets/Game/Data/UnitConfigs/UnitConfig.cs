@@ -16,9 +16,12 @@ namespace Game.Data.UnitConfigs
         [field: SerializeField] public UnitVisualData VisualData { get; private set; }
         
         [field: SerializeField] public List<UnitPattern> UnitPatterns { get; private set; }
+        [field: SerializeField] public UnitChecker UnitChecker { get; private set; }
+        
+        [field: SerializeField] public UnitPrioritySettings PrioritySettings { get; private set; }
         
     }
-
+    
     [Serializable]
     public class UnitDefinition
     {
@@ -47,7 +50,7 @@ namespace Game.Data.UnitConfigs
         public int health;
         public int attack;
         public int defense;
-        public int cellsInTurn;
+        public int actionPoints;
         public int initiative;
     }
 
@@ -58,6 +61,21 @@ namespace Game.Data.UnitConfigs
         public string death;
         public string attack;
         public string hit;
+    }
+
+    [Serializable]
+    public class UnitChecker
+    {
+        public float aroundUnit;
+        public float cellRadius;
+
+        public LayerMask targetLayer;
+    }
+
+    [Serializable]
+    public class UnitPrioritySettings
+    {
+        public List<UnitType> priorityType;
     }
 
     public enum UnitType

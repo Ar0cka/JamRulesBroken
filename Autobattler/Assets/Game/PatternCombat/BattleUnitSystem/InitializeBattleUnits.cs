@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using BattleSystem;
-using BattleSystem.UnitSystem.data;
 using Game.Data.UnitConfigs;
+using Game.PatternCombat.Grid.Services;
+using Game.PatternCombat.Units;
 using Grid;
 using UnityEngine;
 using Zenject;
@@ -13,6 +13,7 @@ namespace Game.PatternCombat.BattleUnitSystem
         [SerializeField] private GridSystem grid;
         
         [Inject] private UnitsRegister _register;
+        [Inject] private GridQuery _gridQuery;
         
         public void CreateArmy(UnitParent parent, List<UnitWorldInfo> units)
         {
@@ -29,18 +30,16 @@ namespace Game.PatternCombat.BattleUnitSystem
         {
             var spawnPoint = parent == UnitParent.Player ? grid.GetRandomPlayerCell() : grid.GetRandomEnemyCell();
 
-            var unitStates = new UnitBattleStates(unitInfo);
+            var unitStates = new UnitCombatInfo(unitInfo, parent);
             
-            unitStates.SetPosition(spawnPoint.x, spawnPoint.y, grid.GetPosition(spawnPoint.y, spawnPoint.x));
-
-            var unitObject = Instantiate(unitStates.WorldInfo.unitConfig.VisualData.unitModel);
-            unitObject.transform.position = unitStates.CurrentWorldPosition;
+            var unitObject = Instantiate(unitStates.UnitInfo.unitConfig.VisualData.unitModel);
+            unitObject.transform.position = unitStates.UnitPosition.WorldPosition;
             unitObject.name = $"{unitObject.name}:{parent}";
             
             var unitController = unitObject.GetComponent<UnitController>();
-            unitController.InitializeUnit(unitStates, parent, grid);
+            unitController.InitializeUnit(unitStates, parent, grid.GridData[spawnPoint.x, spawnPoint.y], _gridQuery);
 
-            if (unitController.unitParent == UnitParent.Enemy)
+            if (unitController.GetParentType() == UnitParent.Enemy)
             {
                 unitController.GetComponent<SpriteRenderer>().flipX = true;
             }

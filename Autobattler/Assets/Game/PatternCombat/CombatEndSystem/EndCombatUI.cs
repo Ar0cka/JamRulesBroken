@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Game.Combat.UnitSystem.data;
+using Game.Core.SceneManagerWorld.SendData;
 using Game.Data.UnitConfigs;
 using UnityEngine;
 

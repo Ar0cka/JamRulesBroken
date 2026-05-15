@@ -1,54 +1,80 @@
 using System.Collections.Generic;
-using BattleSystem;
-using DefaultNamespace.Pathfiender;
-using Game.Combat.Grid;
+using Cysharp.Threading.Tasks;
+using Game.Core.BaseUnits;
 using Game.PatternCombat.BattleUnitSystem;
 using Game.PatternCombat.TrunControllers;
-using Grid;
-using UnityEngine;
 using Zenject;
 
 namespace Game.Core.BaseTurnController
 {
-    public abstract class BaseTurnController : MonoBehaviour
+    public abstract class BaseTurnController : ITurnController
     {
-        [Inject] protected PathService PathService;
-        [Inject] protected UnitsRegister Units;
+        protected Queue<BaseUnitController> UnitsQueue = new();
         
-        protected Queue<UnitController> UnitsQueue;
-
-        public int CurrenTurn { get; private set; } = 0;
-
+        protected int TurnCount = 0;
+        protected bool IsTurn = false;
         protected bool IsPlayerTurn = false;
-        protected bool IsUnitTurn = false;
 
-        public abstract void InitializeTurnController();
+        protected IUnitRegister UnitsRegister;
+        protected IPathService PathService;
+        
 
-        protected virtual void CreateTurn()
+        public abstract void InitializeTurnController(IUnitRegister unitRegister, IPathService pathService);
+
+        public abstract UniTask Turn();
+        public async UniTask AwaitPlayerTurn()
         {
-            var units = GetAllUnits();
+            IsPlayerTurn = true;
+            IsTurn = false;
             
-            units.Sort((a, b) => 
-                a.GetData().WorldInfo.unitConfig.Stats.initiative.CompareTo(b.GetData().WorldInfo.unitConfig.Stats.initiative));
+            await UniTask.WaitUntil(() => !IsPlayerTurn && IsTurn);
+        }
+        public virtual void CreateTurn()
+        {
+            UnitsQueue.Clear();
+            
+            var units = GetAllUnits();
+
+            units.Sort((a, b) => b.GetUnitInfo().UnitInfo.unitConfig.Stats.initiative
+                .CompareTo(a.GetUnitInfo().UnitInfo.unitConfig.Stats.initiative));
             
             foreach (var unit in units)
             {
                 UnitsQueue.Enqueue(unit);
             }
             
-            CurrenTurn++;
+            TurnCount++;
 
             IsPlayerTurn = true;
-            IsUnitTurn = true;
+            IsTurn = false;
+        }
+        
+        public bool IsTurnActive() => IsTurn;
+        public int GetCurrentTurn() => TurnCount;
+        public void PlayerTurnIsEnd()
+        {
+            IsPlayerTurn = false;
+            IsTurn = true;
         }
 
-        protected List<UnitController> GetAllUnits()
+        protected List<BaseUnitController> GetAllUnits()
         {
-            List<UnitController> units = new List<UnitController>();
-            units.AddRange(Units.GetUnits(UnitParent.Player).Values);
-            units.AddRange(Units.GetUnits(UnitParent.Enemy).Values);
+            List<BaseUnitController> units = new();
+            units.AddRange(UnitsRegister.GetUnits(UnitParent.Player).Values);
+            units.AddRange(UnitsRegister.GetUnits(UnitParent.Enemy).Values);
 
             return units;
         }
+    }
+
+    public interface ITurnController
+    {
+        public void InitializeTurnController(IUnitRegister unitRegister, IPathService pathService);
+        public UniTask AwaitPlayerTurn();
+        public UniTask Turn();
+        
+        public void PlayerTurnIsEnd();
+        public bool IsTurnActive();
+        public int GetCurrentTurn();
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.Data.UnitConfigs;
 using UnityEngine;
 
 namespace Game.Data.Patterns
@@ -11,7 +12,7 @@ namespace Game.Data.Patterns
         [field: SerializeField] public string PatternName { get; private set; }
 
         [field: SerializeField] public List<EffectConfig> PatternEffects { get; private set; }
-        [field: SerializeField] public List<EffectiveTargets> EffectiveTargets { get; private set; }
+        [field: SerializeField] public List<UnitType> EffectiveTargets { get; private set; }
 
         [field: SerializeField] public int Cooldown { get; private set; }
         
